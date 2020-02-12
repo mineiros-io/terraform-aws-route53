@@ -1,12 +1,23 @@
+# IntelliJ files
+.idea_modules
+*.iml
+*.iws
+*.ipr
+.idea/
+build/
+*/build/
+out/
+
+# macOS files
+.history
+.DS_Store
+
 # Local .terraform directories
 **/.terraform/*
 
 # .tfstate files
 *.tfstate
 *.tfstate.*
-
-# Crash log files
-crash.log
 
 # Ignore any .tfvars files that are generated automatically for each Terraform run. Most
 # .tfvars files are managed as part of configuration and so should be included in
@@ -27,3 +38,9 @@ override.tf.json
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+
+# Go best practices dictate that libraries should not include the vendor directory
+vendor
+
+# Terratest directory used to store temporary data
+.test-data
