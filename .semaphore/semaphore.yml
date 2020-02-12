@@ -1,0 +1,25 @@
+version: v1.0
+name: "Terraform-Module-Route53 CI Pipeline"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+
+blocks:
+  - name: "Tests"
+    task:
+#      secrets:
+#        - name: TERRAFORM_GITHUB_CREDENTIALS
+#        - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
+      prologue:
+        commands:
+          - checkout --use-cache
+      jobs:
+        - name: "Pre Commit Hooks"
+          commands:
+            - make docker/pre-commit-hooks
+
+# There are no unit tests inside this repository since it acts as a code convention example only
+#        - name: "Unit Tests"
+#          commands:
+#            - make docker/unit-tests
