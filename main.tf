@@ -10,9 +10,10 @@ resource "aws_route53_zone" "zone" {
 locals {
   route53_records = {
     for record in var.records : replace(record.name, ".", "-") => {
-      name = record.name
-      type = record.type
-      ttl  = try(record.ttl, "300")
+      name   = record.name
+      type   = record.type
+      ttl    = try(record.ttl, "300")
+      weight = try(record.weight, 0)
     }
   }
 }
@@ -24,5 +25,9 @@ resource "aws_route53_record" "record" {
   name    = each.value.name
   type    = each.value.type
   ttl     = each.value.ttl
+
+  weighted_routing_policy {
+    weight = each.value.weight
+  }
 }
 
