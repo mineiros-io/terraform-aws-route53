@@ -7,3 +7,11 @@ output "name_servers" {
   description = "A list of name servers in associated (or default) delegation set"
   value       = try(aws_route53_zone.zone[0].name_servers, null)
 }
+
+output "a_records" {
+  value = aws_route53_record.a_record
+}
+
+output "cname_records" {
+  value = aws_route53_record.cname_record
+}

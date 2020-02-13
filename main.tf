@@ -8,45 +8,77 @@ resource "aws_route53_zone" "zone" {
 }
 
 locals {
-  route53_records = {
-    for record in var.records : replace(record.name, ".", "-") => {
-      name   = record.name
-      type   = record.type
-      ttl    = try(record.ttl, "300")
-      weight = try(record.weight, 0)
+  a_records = {
+    for record in var.a_records : replace(record.name, ".", "-") => {
+      name    = record.name
+      type    = "A"
+      ttl     = try(record.ttl, null)
+      records = try(record.records, null)
+
+      alias = try(record.alias, {})
+
     }
   }
-}
 
-resource "aws_route53_record" "record" {
-  for_each = var.create ? local.route53_records : {}
-
-  zone_id = aws_route53_zone.zone[0].id
-  name    = each.value.name
-  type    = each.value.type
-  ttl     = each.value.ttl
-
-  weighted_routing_policy {
-    weight = each.value.weight
+  cname_records = {
+    # If we run into errors with duplicate keys, we could use something super hacky:
+    # for record in var.a_records : replace("${record.name}-${try(record.records[0], record.alias.zone_id)}", ".", "-") => {
+    for record in var.cname_records : replace(record.name, ".", "-") => {
+      name    = record.name
+      type    = "CNAME"
+      ttl     = record.ttl
+      records = record.records
+    }
   }
+
+  route53_records = {}
 }
 
-# Create Google Mail MX entries
-resource "aws_route53_record" "google_mail_mx" {
-  count = var.create && var.enable_google_mail_mx ? 1 : 0
+# Create A records
+resource "aws_route53_record" "a_record" {
+  for_each = var.create ? local.a_records : {}
 
-  name    = ""
-  type    = "MX"
   zone_id = aws_route53_zone.zone[0].id
-  ttl     = var.google_mail_mx_ttl
+  type    = "A"
 
-  records = [
-    "5 ASPMX.L.GOOGLE.COM",
-    "5 ALT1.ASPMX.L.GOOGLE.COM",
-    "5 ALT2.ASPMX.L.GOOGLE.COM",
-    "10 ALT3.ASPMX.L.GOOGLE.COM",
-    "10 ALT4.ASPMX.L.GOOGLE.COM"
-  ]
+  name    = each.value.name
+  ttl     = each.value.ttl
+  records = each.value.records
+
+  dynamic "alias" {
+    # toDo: we could add a condition here that if ttl and records are set alias should be ignored?
+    for_each = each.value.alias
+
+    content {
+      name                   = each.value.alias.name
+      zone_id                = each.value.alias.zone_id
+      evaluate_target_health = each.value.alias.evaluate_target_health
+    }
+  }
+
 }
 
+# Create CNAME records
+resource "aws_route53_record" "cname_record" {
+  for_each = var.create ? local.cname_records : {}
 
+  zone_id = aws_route53_zone.zone[0].id
+  type    = "CNAME"
+
+  name    = each.value.name
+  ttl     = each.value.ttl
+  records = each.value.records
+}
+
+#resource "aws_route53_record" "record" {
+#  for_each = var.create ? local.route53_records : {}
+#
+#  zone_id = aws_route53_zone.zone[0].id
+#  name    = each.value.name
+#  type    = each.value.type
+#  ttl     = each.value.ttl
+#
+#  weighted_routing_policy {
+#    weight = each.value.weight
+#  }
+#}

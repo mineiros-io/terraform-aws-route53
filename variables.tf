@@ -21,6 +21,41 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "a_records" {
+  description = "A list of A records to add to the created Route53 Zone."
+  type        = list(any)
+  # We unfortunately cannot use rich value types for now, we still need to wait for optional arguments to be released.
+  #  type      = list(object({
+  #    name    = string
+  #    ttl     = number
+  #    records = list(string)
+  #  }))
+
+  # Example:
+  #
+  # a_records = [
+  #   {
+  #     name = "www.example.com"
+  #     ttl  = 300
+  #     records = [
+  #       "172.217.16.206",
+  #       "172.217.18.163"
+  #     ]
+  #   }
+  # ]
+  default = []
+}
+
+variable "cname_records" {
+  description = "A list of CNAME records to add to the created Route53 Zone."
+  type = list(object({
+    name    = string
+    ttl     = number
+    records = list(string)
+  }))
+  default = []
+}
+
 variable "create" {
   description = "Whether to create the Route53 Zone and it's associated resources."
   type        = bool
@@ -46,9 +81,15 @@ variable "enable_google_mail_mx" {
 }
 
 variable "google_mail_mx_ttl" {
-  description = "The TTL used for the created Google Mail MX entries."
+  description = "The TTL (time to live) used for the created Google Mail MX entries."
   type        = number
   default     = 3600
+}
+
+variable "google_suite_services" {
+  description = ""
+  type        = list(string)
+  default     = ["mail", "cal", "docs"]
 }
 
 variable "tags" {
