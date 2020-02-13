@@ -24,6 +24,7 @@ variable "name" {
 variable "a_records" {
   description = "A list of A records to add to the created Route53 Zone."
   type        = list(any)
+  #
   # We unfortunately cannot use rich value types for now, we still need to wait for optional arguments to be released.
   #  type      = list(object({
   #    name    = string
@@ -48,11 +49,22 @@ variable "a_records" {
 
 variable "cname_records" {
   description = "A list of CNAME records to add to the created Route53 Zone."
-  type = list(object({
-    name    = string
-    ttl     = number
-    records = list(string)
-  }))
+  type        = list(any)
+
+  # Example:
+  #
+  # cname_records = [
+  #   {
+  #     name = "www"
+  #     ttl  = 3600
+  #     records = [
+  #       "example.com"
+  #     ]
+  #   }
+  # ]
+  #
+  #
+
   default = []
 }
 
@@ -88,7 +100,7 @@ variable "google_mail_mx_ttl" {
 
 variable "google_suite_services" {
   description = ""
-  type        = list(string)
+  type        = set(string)
   default     = ["mail", "cal", "docs"]
 }
 

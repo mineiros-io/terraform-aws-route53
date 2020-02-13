@@ -14,9 +14,7 @@ locals {
       type    = "A"
       ttl     = try(record.ttl, null)
       records = try(record.records, null)
-
-      alias = try(record.alias, {})
-
+      alias   = try(record.alias, {})
     }
   }
 
@@ -26,8 +24,9 @@ locals {
     for record in var.cname_records : replace(record.name, ".", "-") => {
       name    = record.name
       type    = "CNAME"
-      ttl     = record.ttl
-      records = record.records
+      ttl     = try(record.ttl, null)
+      records = try(record.records, null)
+      alias   = try(record.alias, {})
     }
   }
 
@@ -55,7 +54,6 @@ resource "aws_route53_record" "a_record" {
       evaluate_target_health = each.value.alias.evaluate_target_health
     }
   }
-
 }
 
 # Create CNAME records
@@ -68,6 +66,16 @@ resource "aws_route53_record" "cname_record" {
   name    = each.value.name
   ttl     = each.value.ttl
   records = each.value.records
+
+  dynamic "alias" {
+    for_each = each.value.alias
+
+    content {
+      name                   = each.value.alias.name
+      zone_id                = each.value.alias.zone_id
+      evaluate_target_health = each.value.alias.evaluate_target_health
+    }
+  }
 }
 
 #resource "aws_route53_record" "record" {
