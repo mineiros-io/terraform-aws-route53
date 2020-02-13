@@ -1,12 +1,12 @@
 resource "aws_route53_zone" "zone" {
-  count = var.create ? 1 : 0
+  for_each = var.create ? map(replace(var.name, ".", "-"), var.name) : {}
 
-  name              = var.name
+  name              = each.value
   force_destroy     = var.force_destroy
   delegation_set_id = var.delegation_set_id
 
   tags = merge(
-    { Name = var.name },
+    { Name = each.value },
     var.tags
   )
 }
@@ -52,7 +52,7 @@ locals {
 resource "aws_route53_record" "record" {
   for_each = var.create ? local.all_records : {}
 
-  zone_id = aws_route53_zone.zone[0].id
+  zone_id = aws_route53_zone.zone[replace(var.name, ".", "-")].id
   type    = each.value.type
   name    = each.value.name
   ttl     = each.value.ttl
