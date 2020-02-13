@@ -1,7 +1,8 @@
 module "route53" {
   source = "../.."
 
-  name = "mineiros.test"
+  name                  = "mineiros.test"
+  enable_google_mail_mx = true
 
   records = [
     {

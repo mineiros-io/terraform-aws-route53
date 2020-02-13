@@ -39,6 +39,18 @@ variable "force_destroy" {
   default     = false
 }
 
+variable "enable_google_mail_mx" {
+  description = "Whether to create the standard set of Google Mail MX entries."
+  type        = bool
+  default     = false
+}
+
+variable "google_mail_mx_ttl" {
+  description = "The TTL used for the created Google Mail MX entries."
+  type        = number
+  default     = 3600
+}
+
 variable "tags" {
   type    = map(string)
   default = {}
