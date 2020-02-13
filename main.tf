@@ -19,7 +19,7 @@ locals {
   }
 
   cname_records = {
-    # If we run into errors with duplicate keys, we could use something super hacky:
+    # toDo: If we run into errors with duplicate keys, we could use something super hacky:
     # for record in var.a_records : replace("${record.name}-${try(record.records[0], record.alias.zone_id)}", ".", "-") => {
     for record in var.cname_records : replace(record.name, ".", "-") => {
       name    = record.name

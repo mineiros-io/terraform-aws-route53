@@ -98,10 +98,20 @@ variable "google_mail_mx_ttl" {
   default     = 3600
 }
 
-variable "google_suite_services" {
-  description = ""
-  type        = set(string)
-  default     = ["mail", "cal", "docs"]
+variable "google_suite_services_custom_aliases" {
+  description = "A map of Google Services and their customized URLs. The key is the services name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite: https://support.google.com/a/answer/53340?hl=en"
+  type        = map(string)
+
+  #
+  # Example:
+  #
+  # google_suite_services = {
+  #   mail     = "mail",
+  #   calendar = "calendar",
+  #   drive    = "drive",
+  #   groups   = "groups"
+  # }
+  default = {}
 }
 
 variable "tags" {
