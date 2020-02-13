@@ -24,7 +24,7 @@ variable "name" {
 variable "a_records" {
   description = "A list of A records to add to the created Route53 Zone."
   type        = list(any)
-  #
+
   # We unfortunately cannot use rich value types for now, we still need to wait for optional arguments to be released.
   #  type      = list(object({
   #    name    = string
@@ -44,6 +44,7 @@ variable "a_records" {
   #     ]
   #   }
   # ]
+
   default = []
 }
 
@@ -62,8 +63,6 @@ variable "cname_records" {
   #     ]
   #   }
   # ]
-  #
-  #
 
   default = []
 }
@@ -116,6 +115,19 @@ variable "google_mail_mx_ttl" {
   default     = 3600
 }
 
+variable "google_mail_dkim" {
+  description = "Define the DKIM record to enhance security for outgoing mails with in Google Suite. Notice that you need to verify the DKIM record. https://support.google.com/a/answer/174126?hl=en"
+  type        = map(string)
+
+  # Example:
+  #
+  # google_mail_dkim = {
+  #   "google._domainkey" = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoeaZAFNfAvwiMkuIHimJVODdtPX+9d7uVhFrML2S8m0GNd0c9w8Os5nQBeQaBmm1h7S/yxYrc5lcV5eaF1TgBmg9fYrwKXG8u1+gotmhFHhWl/GebYiUa/PchLAG+rrSav7lDlB3uTcbMGZUPQ3uuQOEwqi7SRsAFilAYFIkK+N6Crpis9LABFVAkrWsEbxOpVArxAdRpe6UuYAnS/Ge1uGOKu3L1kK5AGVN2HIkQPEllAQ0KY2yiPGfQXw8SA5ibZ0FjKlnw4amocZyBSLBlpHo9/qzLAy9JoByTOoZXdijikPY7zioSGIfOaY0RqSIpR338VXhHS76QMrDG5fLwQIDAQAB"
+  # }
+
+  default = {}
+}
+
 variable "force_destroy" {
   description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
   type        = bool
@@ -134,6 +146,7 @@ variable "google_suite_services_custom_aliases" {
   #   drive    = "drive",
   #   groups   = "groups"
   # }
+
   default = {}
 }
 
@@ -153,5 +166,6 @@ variable "tags" {
   #   CreatedAt = "2020-02-07",
   #   Alice     = "Bob
   # }
+
   default = {}
 }

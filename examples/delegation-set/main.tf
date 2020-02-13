@@ -12,7 +12,6 @@ module "foo-com" {
 
   name              = "foo.com"
   delegation_set_id = module.delegation-set.delegation_set[0].id
-
 }
 
 module "bob-com" {
@@ -20,5 +19,4 @@ module "bob-com" {
 
   name              = "bob.com"
   delegation_set_id = module.delegation-set.delegation_set[0].id
-
 }

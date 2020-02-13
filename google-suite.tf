@@ -16,8 +16,20 @@ resource "aws_route53_record" "google_mail_mx" {
   ]
 }
 
+# Create a range of CNAMES records for Google Suite Services
+resource "aws_route53_record" "google_suite_aliases" {
+  for_each = var.create ? var.google_suite_services_custom_aliases : {}
+
+  name    = each.value
+  type    = "CNAME"
+  zone_id = aws_route53_zone.zone[0].zone_id
+  ttl     = 3600
+
+  records = ["ghs.googlehosted.com"]
+}
+
 # Create a SPF record to prevent email spoofing
-# Please be aware that you need to verify the SPF record: https://support.google.com/a/answer/33786?hl=en
+# Notice that you need to verify the SPF record: https://support.google.com/a/answer/33786?hl=en
 resource "aws_route53_record" "google_spf" {
   count = var.create && var.create_google_spf ? 1 : 0
 
@@ -29,14 +41,15 @@ resource "aws_route53_record" "google_spf" {
   records = ["v=spf1 include:_spf.google.com ~all"]
 }
 
-# Create a range of CNAMES records for Google Suite Services
-resource "aws_route53_record" "google_suite_aliases" {
-  for_each = var.create ? var.google_suite_services_custom_aliases : {}
+# Create the DKIM record to enhance security for outgoing email
+# Notice that you need to verify the DKIM record: https://support.google.com/a/answer/174126?hl=en
+resource "aws_route53_record" "google_dkim" {
+  for_each = var.create ? var.google_mail_dkim : {}
 
-  name    = each.value
-  type    = "CNAME"
-  zone_id = aws_route53_zone.zone[0].zone_id
+  name    = each.key
+  type    = "TXT"
+  zone_id = aws_route53_zone.zone[0].id
   ttl     = 3600
 
-  records = ["ghs.googlehosted.com"]
+  records = [each.value]
 }
