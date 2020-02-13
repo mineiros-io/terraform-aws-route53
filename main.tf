@@ -1,9 +1,3 @@
-resource "aws_route53_delegation_set" "delegation_set" {
-  count = var.create_delegation_set ? 1 : 0
-
-  reference_name = var.delegation_set_reference_name
-}
-
 resource "aws_route53_zone" "zone" {
   count = var.create ? 1 : 0
 
@@ -15,6 +9,12 @@ resource "aws_route53_zone" "zone" {
     { Name = var.name },
     var.tags
   )
+}
+
+resource "aws_route53_delegation_set" "delegation_set" {
+  count = var.create_delegation_set ? 1 : 0
+
+  reference_name = var.delegation_set_reference_name
 }
 
 locals {

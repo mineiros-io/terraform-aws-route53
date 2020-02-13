@@ -94,7 +94,7 @@ variable "create_google_spf" {
 variable "create_delegation_set" {
   description = "Whether to create a delegation set."
   type        = bool
-  default     = false
+  default     = true
 }
 
 variable "delegation_set_id" {
