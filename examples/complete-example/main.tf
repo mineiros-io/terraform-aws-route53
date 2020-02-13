@@ -40,4 +40,17 @@ module "route53" {
       ]
     }
   ]
+
+  records = [
+    {
+      type = "A"
+      name = "testing.mineiros.io"
+      ttl  = 3600
+      #      allow_overwrite = true
+      #      health_check_id = ""
+      records = [
+        "172.217.16.209"
+      ]
+    }
+  ]
 }

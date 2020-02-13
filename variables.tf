@@ -80,12 +80,6 @@ variable "comment" {
   default     = "Managed by Terraform"
 }
 
-variable "force_destroy" {
-  description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
-  type        = bool
-  default     = false
-}
-
 variable "create_google_mail_mx" {
   description = "Whether to create the standard set of Google Mail MX entries."
   type        = bool
@@ -104,6 +98,12 @@ variable "google_mail_mx_ttl" {
   default     = 3600
 }
 
+variable "force_destroy" {
+  description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
+  type        = bool
+  default     = false
+}
+
 variable "google_suite_services_custom_aliases" {
   description = "A map of customized Google Suote service URLs. The key is the service name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite. https://support.google.com/a/answer/53340?hl=en"
   type        = map(string)
@@ -119,6 +119,12 @@ variable "google_suite_services_custom_aliases" {
   default = {}
 }
 
+variable "records" {
+  description = "A list of records to create in the Hosted Zone."
+  type        = list(any)
+  default     = []
+}
+
 variable "tags" {
   description = "A map of tags to apply to all created resources that support tags."
   type        = map(string)
@@ -130,9 +136,4 @@ variable "tags" {
   #   Alice     = "Bob
   # }
   default = {}
-}
-
-variable "records" {
-  type    = list(any)
-  default = []
 }
