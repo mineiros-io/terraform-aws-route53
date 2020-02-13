@@ -11,3 +11,7 @@ output "name_servers" {
 output "records" {
   value = aws_route53_record.record
 }
+
+output "delegation_set" {
+  value = try(aws_route53_delegation_set.delegation_set, null)
+}

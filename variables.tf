@@ -92,6 +92,24 @@ variable "create_google_spf" {
   default     = false
 }
 
+variable "create_delegation_set" {
+  description = "Whether to create a delegation set."
+  type        = bool
+  default     = false
+}
+
+variable "delegation_set_id" {
+  description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
+  type        = string
+  default     = null
+}
+
+variable "delegation_set_reference_name" {
+  description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
+  type        = string
+  default     = null
+}
+
 variable "google_mail_mx_ttl" {
   description = "The TTL (time to live) used for the created Google Mail MX entries."
   type        = number

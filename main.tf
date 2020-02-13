@@ -1,8 +1,15 @@
+resource "aws_route53_delegation_set" "delegation_set" {
+  count = var.create_delegation_set ? 1 : 0
+
+  reference_name = var.delegation_set_reference_name
+}
+
 resource "aws_route53_zone" "zone" {
   count = var.create ? 1 : 0
 
-  name          = var.name
-  force_destroy = var.force_destroy
+  name              = var.name
+  force_destroy     = var.force_destroy
+  delegation_set_id = var.delegation_set_id
 
   tags = merge(
     { Name = var.name },
