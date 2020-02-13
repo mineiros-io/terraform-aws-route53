@@ -1,6 +1,6 @@
 # Create Google Mail MX entries
 resource "aws_route53_record" "google_mail_mx" {
-  count = var.create && var.enable_google_mail_mx ? 1 : 0
+  count = var.create && var.create_google_mail_mx ? 1 : 0
 
   name    = ""
   type    = "MX"
@@ -16,14 +16,27 @@ resource "aws_route53_record" "google_mail_mx" {
   ]
 }
 
+# Create a SPF record to prevent email spoofing
+# Please be aware that you need to verify the SPF record: https://support.google.com/a/answer/33786?hl=en
+resource "aws_route53_record" "google_spf" {
+  count = var.create && var.create_google_spf ? 1 : 0
+
+  name    = ""
+  type    = "SPF"
+  zone_id = aws_route53_zone.zone[0].id
+  ttl     = 3600
+
+  records = ["v=spf1 include:_spf.google.com ~all"]
+}
+
 # Create a range of CNAMES records for Google Suite Services
 resource "aws_route53_record" "google_suite_aliases" {
   for_each = var.create ? var.google_suite_services_custom_aliases : {}
 
-  zone_id = aws_route53_zone.zone[0].zone_id
   name    = each.value
-
   type    = "CNAME"
-  records = ["ghs.googlehosted.com"]
+  zone_id = aws_route53_zone.zone[0].zone_id
   ttl     = 3600
+
+  records = ["ghs.googlehosted.com"]
 }

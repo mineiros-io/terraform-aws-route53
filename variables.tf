@@ -86,8 +86,14 @@ variable "force_destroy" {
   default     = false
 }
 
-variable "enable_google_mail_mx" {
+variable "create_google_mail_mx" {
   description = "Whether to create the standard set of Google Mail MX entries."
+  type        = bool
+  default     = false
+}
+
+variable "create_google_spf" {
+  description = "Whether to create a SPF entry for Google Suite. Please notice that the entry needs to valiadte in Google Suite. https://support.google.com/a/answer/33786?hl=en"
   type        = bool
   default     = false
 }
@@ -99,10 +105,9 @@ variable "google_mail_mx_ttl" {
 }
 
 variable "google_suite_services_custom_aliases" {
-  description = "A map of Google Services and their customized URLs. The key is the services name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite: https://support.google.com/a/answer/53340?hl=en"
+  description = "A map of customized Google Suote service URLs. The key is the service name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite. https://support.google.com/a/answer/53340?hl=en"
   type        = map(string)
 
-  #
   # Example:
   #
   # google_suite_services = {
@@ -115,7 +120,15 @@ variable "google_suite_services_custom_aliases" {
 }
 
 variable "tags" {
-  type    = map(string)
+  description = "A map of tags to apply to all created resources that support tags."
+  type        = map(string)
+
+  # Example:
+  #
+  # tags = {
+  #   CreatedAt = "2020-02-07",
+  #   Alice     = "Bob
+  # }
   default = {}
 }
 

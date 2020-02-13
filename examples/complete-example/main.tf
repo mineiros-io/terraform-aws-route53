@@ -1,21 +1,18 @@
 module "route53" {
   source = "../.."
 
-  # The name of the hosted zone
-  name = "mineiros.io"
-
-  # Create Google Suite MX records
-  enable_google_mail_mx = true
+  name                  = "mineiros.io"
+  create_google_mail_mx = true
+  create_google_spf     = true
 
   # Create a range of G Suite service URLs
   google_suite_services_custom_aliases = {
     mail     = "mail",
-    calendar = "cal",
+    calendar = "calendar",
     drive    = "drive",
     groups   = "groups"
   }
 
-  # Create a list of A Records
   a_records = [
     {
       name = "mineiros.io"
@@ -34,7 +31,6 @@ module "route53" {
     }
   ]
 
-  # Create a list of CNAME Records
   cname_records = [
     {
       name = "development"

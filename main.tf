@@ -4,7 +4,10 @@ resource "aws_route53_zone" "zone" {
   name          = var.name
   force_destroy = var.force_destroy
 
-  tags = var.tags
+  tags = merge(
+    { Name = var.name },
+    var.tags
+  )
 }
 
 locals {
@@ -19,8 +22,6 @@ locals {
   }
 
   cname_records = {
-    # toDo: If we run into errors with duplicate keys, we could use something super hacky:
-    # for record in var.a_records : replace("${record.name}-${try(record.records[0], record.alias.zone_id)}", ".", "-") => {
     for record in var.cname_records : replace(record.name, ".", "-") => {
       name    = record.name
       type    = "CNAME"
