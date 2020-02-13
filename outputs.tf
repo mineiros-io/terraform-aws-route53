@@ -8,10 +8,6 @@ output "name_servers" {
   value       = try(aws_route53_zone.zone[0].name_servers, null)
 }
 
-output "a_records" {
-  value = aws_route53_record.a_record
-}
-
-output "cname_records" {
-  value = aws_route53_record.cname_record
+output "records" {
+  value = aws_route53_record.record
 }

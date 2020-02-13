@@ -35,12 +35,11 @@ module "route53" {
 
   cname_records = [
     {
-      name = "www"
+      name = "www.mineiros.io"
       ttl  = 3600
       records = [
         "mineiros.io"
       ]
     }
   ]
-
 }

@@ -31,7 +31,7 @@ locals {
     }
   }
 
-  route53_records = {
+  all_records = merge({
     for record in var.records : replace(record.name, ".", "-") => {
       name    = record.name
       type    = record.type
@@ -39,54 +39,11 @@ locals {
       records = try(record.records, null)
       alias   = try(record.alias, {})
     }
-  }
-}
-
-# Create A records
-resource "aws_route53_record" "a_record" {
-  for_each = var.create ? local.a_records : {}
-
-  zone_id = aws_route53_zone.zone[0].id
-  type    = "A"
-  name    = each.value.name
-  ttl     = each.value.ttl
-  records = each.value.records
-
-  dynamic "alias" {
-    # toDo: we could add a condition here that if ttl and records are set alias should be ignored?
-    for_each = each.value.alias
-
-    content {
-      name                   = each.value.alias.name
-      zone_id                = each.value.alias.zone_id
-      evaluate_target_health = each.value.alias.evaluate_target_health
-    }
-  }
-}
-
-# Create CNAME records
-resource "aws_route53_record" "cname_record" {
-  for_each = var.create ? local.cname_records : {}
-
-  zone_id = aws_route53_zone.zone[0].id
-  type    = "CNAME"
-  name    = each.value.name
-  ttl     = each.value.ttl
-  records = each.value.records
-
-  dynamic "alias" {
-    for_each = each.value.alias
-
-    content {
-      name                   = each.value.alias.name
-      zone_id                = each.value.alias.zone_id
-      evaluate_target_health = each.value.alias.evaluate_target_health
-    }
-  }
+  }, local.a_records, local.cname_records)
 }
 
 resource "aws_route53_record" "record" {
-  for_each = var.create ? local.route53_records : {}
+  for_each = var.create ? local.all_records : {}
 
   zone_id = aws_route53_zone.zone[0].id
   type    = each.value.type
