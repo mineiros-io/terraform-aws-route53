@@ -21,52 +21,6 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "a_records" {
-  description = "A list of A records to add to the created Route53 Zone."
-  type        = list(any)
-
-  # We unfortunately cannot use rich value types for now, we still need to wait for optional arguments to be released.
-  #  type      = list(object({
-  #    name    = string
-  #    ttl     = number
-  #    records = list(string)
-  #  }))
-
-  # Example:
-  #
-  # a_records = [
-  #   {
-  #     name = "www.example.com"
-  #     ttl  = 300
-  #     records = [
-  #       "172.217.16.206",
-  #       "172.217.18.163"
-  #     ]
-  #   }
-  # ]
-
-  default = []
-}
-
-variable "cname_records" {
-  description = "A list of CNAME records to add to the created Route53 Zone."
-  type        = list(any)
-
-  # Example:
-  #
-  # cname_records = [
-  #   {
-  #     name = "www"
-  #     ttl  = 3600
-  #     records = [
-  #       "example.com"
-  #     ]
-  #   }
-  # ]
-
-  default = []
-}
-
 variable "create" {
   description = "Whether to create the Route53 Zone and it's associated resources."
   type        = bool
@@ -87,6 +41,12 @@ variable "create_google_mail_mx" {
 
 variable "create_google_spf" {
   description = "Whether to create a SPF entry for Google Suite. Please notice that the entry needs to valiadte in Google Suite. https://support.google.com/a/answer/33786?hl=en"
+  type        = bool
+  default     = false
+}
+
+variable "create_delegation_set" {
+  description = "Whether or not to create a delegation set and associate with the created zone."
   type        = bool
   default     = false
 }
@@ -146,8 +106,38 @@ variable "google_suite_services_custom_aliases" {
 
 variable "records" {
   description = "A list of records to create in the Hosted Zone."
-  type        = list(any)
-  default     = []
+  type        = any
+
+  # We unfortunately cannot use rich value types for now, we still need to wait for optional arguments to be released.
+  #  type      = list(object({
+  #    name    = string
+  #    ttl     = number
+  #    records = list(string)
+  #  }))
+
+  # Example:
+  #
+  # records = [
+  #   {
+  #     name = "www.example.com"
+  #     type = "A"
+  #     ttl  = 300
+  #     records = [
+  #       "172.217.16.206",
+  #       "172.217.18.163"
+  #     ]
+  #   },
+  #   {
+  #     name = "www"
+  #     type = "CNAME"
+  #     ttl  = 3600
+  #     records = [
+  #       "example.com"
+  #     ]
+  #   }
+  # ]
+
+  default = []
 }
 
 variable "tags" {

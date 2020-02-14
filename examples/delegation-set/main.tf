@@ -10,7 +10,8 @@ provider "aws" {
 module "mineiros-io" {
   source = "../.."
 
-  name = "mineiros.io"
+  name                  = "mineiros.io"
+  create_delegation_set = true
 }
 
 module "mineiros-com" {

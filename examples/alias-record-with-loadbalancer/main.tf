@@ -31,24 +31,25 @@ module "route53" {
 
   name = "mineiros.io"
 
-  a_records = [
+  records = [
     {
       name = "mineiros.io"
+      type = "A"
+      # Alias records conflict with ttl
       alias = {
         name                   = aws_elb.main.dns_name
         zone_id                = aws_elb.main.zone_id
         evaluate_target_health = true
       }
-    }
-  ]
-
-  cname_records = [
+    },
     {
       name = "www.mineiros.io"
+      type = "CNAME"
       ttl  = 3600
       records = [
         "mineiros.io"
       ]
     }
   ]
+
 }

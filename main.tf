@@ -3,7 +3,7 @@ resource "aws_route53_zone" "zone" {
 
   name              = var.name
   force_destroy     = var.force_destroy
-  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : aws_route53_delegation_set.delegation_set.id
+  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[0].id, null)
 
   dynamic "vpc" {
     for_each = { for id in var.vpc_ids : id => id }
@@ -20,43 +20,25 @@ resource "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
+  count = var.create && var.create_delegation_set ? 1 : 0
+
   reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : var.name
 }
 
 locals {
-  a_records = {
-    for record in var.a_records : replace(record.name, ".", "-") => {
-      name    = record.name
-      type    = "A"
-      ttl     = try(record.ttl, null)
-      records = try(record.records, null)
-      alias   = try(record.alias, {})
-    }
-  }
-
-  cname_records = {
-    for record in var.cname_records : replace(record.name, ".", "-") => {
-      name    = record.name
-      type    = "CNAME"
-      ttl     = try(record.ttl, null)
-      records = try(record.records, null)
-      alias   = try(record.alias, {})
-    }
-  }
-
-  all_records = merge({
-    for record in var.records : replace(record.name, ".", "-") => {
+  records = {
+    for record in var.records : record.name => {
       name    = record.name
       type    = record.type
       ttl     = try(record.ttl, null)
       records = try(record.records, null)
       alias   = try(record.alias, {})
     }
-  }, local.a_records, local.cname_records)
+  }
 }
 
 resource "aws_route53_record" "record" {
-  for_each = var.create ? local.all_records : {}
+  for_each = var.create ? local.records : {}
 
   zone_id = aws_route53_zone.zone[0].id
   type    = each.value.type

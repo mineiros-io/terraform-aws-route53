@@ -26,9 +26,18 @@ module "route53" {
     "google._domainkey" = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCg\"\"KCAQEAoeaZAFNfAvwiMkuIHimJVODdtPX+9d7uVhFrML2S8m0GNd0c9w8Os5nQBeQaBmm1h7S/yxYrc\"\"5lcV5eaF1TgBmg9fYrwKXG8u1+gotmhFHhWl/GebYiUa/PchLAG+rrSav7lDlB3uTcbMGZUPQ3uuQOEwqi7SRsAFilA\"\"YFIkK+N6Crpis9LABFVAkrWsEbxOpVArxAdRpe6UuYAnS/Ge1uGOKu3L1kK5AG\"\"VN2HIkQPEllAQ0KY2yiPGfQXw8SA5ibZ0FjKlnw4amocZyBSLBlpHo9/qzLAy9Jo\"\"ByTOoZXdijikPY7zioSGIfOaY0RqSIpR338VXhHS76QMrDG5fLwQIDAQAB"
   }
 
-  a_records = [
+  records = [
+    {
+      type = "A"
+      name = "testing.mineiros.io"
+      ttl  = 3600
+      records = [
+        "172.217.16.209"
+      ]
+    },
     {
       name = "mineiros.io"
+      type = "A"
       ttl  = 300
       records = [
         "172.217.16.206",
@@ -37,32 +46,18 @@ module "route53" {
     },
     {
       name = "dev.mineiros.io"
+      type = "A"
       ttl  = 300
       records = [
         "172.217.18.99",
       ]
-    }
-  ]
-
-  cname_records = [
+    },
     {
       name = "development.mineiros.io"
+      type = "CNAME"
       ttl  = 5
       records = [
         "dev.mineiros.io"
-      ]
-    }
-  ]
-
-  records = [
-    {
-      type = "A"
-      name = "testing.mineiros.io"
-      ttl  = 3600
-      #      allow_overwrite = true
-      #      health_check_id = ""
-      records = [
-        "172.217.16.209"
       ]
     }
   ]
