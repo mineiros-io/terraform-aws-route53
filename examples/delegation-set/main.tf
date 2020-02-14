@@ -1,22 +1,19 @@
-module "delegation-set" {
+module "mineiros-io" {
   source = "../.."
 
-  create = false
-  name   = null
-
-  create_delegation_set = true
+  name = "mineiros.io"
 }
 
-module "foo-com" {
+module "mineiros-com" {
   source = "../.."
 
-  name              = "foo.com"
-  delegation_set_id = module.delegation-set.delegation_set[0].id
+  name              = "mineiros.com"
+  delegation_set_id = module.mineiros-io.delegation_set_id
 }
 
-module "bob-com" {
+module "mineiros-de" {
   source = "../.."
 
-  name              = "bob.com"
-  delegation_set_id = module.delegation-set.delegation_set[0].id
+  name              = "mineiros.de"
+  delegation_set_id = module.mineiros-io.delegation_set_id
 }

@@ -1,20 +1,24 @@
+locals {
+  zones = map(replace(var.name, ".", "-"), var.name)
+}
+
 resource "aws_route53_zone" "zone" {
-  for_each = var.create ? map(replace(var.name, ".", "-"), var.name) : {}
+  for_each = var.create ? local.zones : {}
 
   name              = each.value
   force_destroy     = var.force_destroy
-  delegation_set_id = var.delegation_set_id
+  delegation_set_id = length(var.delegation_set_id) > 0 ? var.delegation_set_id : aws_route53_delegation_set.delegation_set[each.key].id
 
   tags = merge(
-    { Name = each.value },
+    { Name = replace(each.value, ".", "-") },
     var.tags
   )
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
-  count = var.create_delegation_set ? 1 : 0
+  for_each = var.create_delegation_set && length(var.delegation_set_id) == 0 ? local.zones : {}
 
-  reference_name = var.delegation_set_reference_name
+  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : each.key
 }
 
 locals {

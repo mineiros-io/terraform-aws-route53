@@ -4,14 +4,20 @@ output "zone_id" {
 }
 
 output "name_servers" {
-  description = "A list of name servers in associated (or default) delegation set"
+  description = "A list of name servers in associated (or default) delegation set."
   value       = try(aws_route53_zone.zone[replace(var.name, ".", "-")].name_servers, null)
 }
 
 output "records" {
-  value = aws_route53_record.record
+  description = "A list of all created records."
+  value       = aws_route53_record.record
 }
 
-output "delegation_set" {
-  value = try(aws_route53_delegation_set.delegation_set, null)
+output "delegation_set_id" {
+  description = "The ID of the created delegation set."
+  value       = try(aws_route53_delegation_set.delegation_set[replace(var.name, ".", "-")].id, "")
+}
+
+output "delegation_set_reference_name" {
+  value = ""
 }

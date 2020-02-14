@@ -100,13 +100,13 @@ variable "create_delegation_set" {
 variable "delegation_set_id" {
   description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "delegation_set_reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
-  default     = null
+  default     = ""
 }
 
 variable "google_mail_mx_ttl" {
