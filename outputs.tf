@@ -1,11 +1,11 @@
 output "zone_id" {
   description = "The Hosted Zone ID. This can be referenced by zone records."
-  value       = try(aws_route53_zone.zone[replace(var.name, ".", "-")].zone_id, null)
+  value       = try(aws_route53_zone.zone[0].zone_id, null)
 }
 
 output "name_servers" {
   description = "A list of name servers in associated (or default) delegation set."
-  value       = try(aws_route53_zone.zone[replace(var.name, ".", "-")].name_servers, null)
+  value       = try(aws_route53_zone.zone[0].name_servers, null)
 }
 
 output "records" {
@@ -15,9 +15,10 @@ output "records" {
 
 output "delegation_set_id" {
   description = "The ID of the created delegation set."
-  value       = try(aws_route53_delegation_set.delegation_set[replace(var.name, ".", "-")].id, "")
+  value       = try(aws_route53_delegation_set.delegation_set.id, "")
 }
 
 output "delegation_set_reference_name" {
-  value = ""
+  description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
+  value       = try(aws_route53_delegation_set.delegation_set.reference_name, "")
 }

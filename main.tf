@@ -1,17 +1,12 @@
-locals {
-  vpc_ids        = { for id in var.vpc_ids : id => id }
-  canonical_name = replace(var.name, ".", "-")
-}
-
 resource "aws_route53_zone" "zone" {
   count = var.create ? 1 : 0
 
   name              = var.name
   force_destroy     = var.force_destroy
-  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0 ? try(var.delegation_set_id, aws_route53_delegation_set.delegation_set[local.canonical_name].id) : null
+  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : aws_route53_delegation_set.delegation_set.id
 
   dynamic "vpc" {
-    for_each = local.vpc_ids
+    for_each = { for id in var.vpc_ids : id => id }
 
     content {
       vpc_id = vpc.value
@@ -19,15 +14,13 @@ resource "aws_route53_zone" "zone" {
   }
 
   tags = merge(
-    { Name = local.canonical_name },
+    { Name = var.name },
     var.tags
   )
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
-  count = length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0 ? 1 : 0
-
-  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : local.canonical_name
+  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : var.name
 }
 
 locals {
