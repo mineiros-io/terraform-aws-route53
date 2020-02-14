@@ -39,4 +39,15 @@ docker/pre-commit-hooks:
 		${BUILD_TOOLS_DOCKER_IMAGE} \
 		sh -c "pre-commit install && pre-commit run --all-files"
 
-.PHONY: help docker/pre-commit-hooks docker/run-tests
+## Mounts the working directory inside a new container and runs the Go tests. Requires $AWS_ACCESS_KEY_ID and $AWS_SECRET_ACCESS_KEY to be set.
+docker/unit-tests:
+	@echo "${GREEN}Start running the unit tests with docker${RESET}"
+	@docker run --rm \
+		-e AWS_ACCESS_KEY_ID \
+		-e AWS_SECRET_ACCESS_KEY \
+		-v ${PWD}:${MOUNT_TARGET_DIRECTORY} \
+		${BUILD_TOOLS_DOCKER_IMAGE} \
+		go test -v -timeout 45m -parallel 128 test/route53_test.go
+
+
+.PHONY: help docker/pre-commit-hooks docker/unit-tests

@@ -1,3 +1,12 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# CONFIGURE OUR AWS CONNECTION
+# ---------------------------------------------------------------------------------------------------------------------
+
+provider "aws" {
+  # The AWS region in which all resources will be created
+  region = var.aws_region
+}
+
 # Default VPC. Terraform does not create this resource, but instead "adopts" it into management.
 resource "aws_default_vpc" "default" {
   tags = {
