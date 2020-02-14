@@ -91,12 +91,6 @@ variable "create_google_spf" {
   default     = false
 }
 
-variable "create_delegation_set" {
-  description = "Whether to create a delegation set."
-  type        = bool
-  default     = true
-}
-
 variable "delegation_set_id" {
   description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
   type        = string

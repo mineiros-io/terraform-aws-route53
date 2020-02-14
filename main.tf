@@ -1,15 +1,14 @@
 locals {
-  zones                 = map(replace(var.name, ".", "-"), var.name)
-  vpc_ids               = { for id in var.vpc_ids : id => id }
-  create_delegation_set = var.create_delegation_set && length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0
+  vpc_ids        = { for id in var.vpc_ids : id => id }
+  canonical_name = replace(var.name, ".", "-")
 }
 
 resource "aws_route53_zone" "zone" {
-  for_each = var.create ? local.zones : {}
+  count = var.create ? 1 : 0
 
-  name              = each.value
+  name              = var.name
   force_destroy     = var.force_destroy
-  delegation_set_id = local.create_delegation_set ? try(var.delegation_set_id, aws_route53_delegation_set.delegation_set[each.key].id) : null
+  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0 ? try(var.delegation_set_id, aws_route53_delegation_set.delegation_set[local.canonical_name].id) : null
 
   dynamic "vpc" {
     for_each = local.vpc_ids
@@ -20,15 +19,15 @@ resource "aws_route53_zone" "zone" {
   }
 
   tags = merge(
-    { Name = replace(each.value, ".", "-") },
+    { Name = local.canonical_name },
     var.tags
   )
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
-  for_each = local.create_delegation_set ? local.zones : {}
+  count = length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0 ? 1 : 0
 
-  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : each.key
+  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : local.canonical_name
 }
 
 locals {
@@ -66,7 +65,7 @@ locals {
 resource "aws_route53_record" "record" {
   for_each = var.create ? local.all_records : {}
 
-  zone_id = aws_route53_zone.zone[replace(var.name, ".", "-")].id
+  zone_id = aws_route53_zone.zone[0].id
   type    = each.value.type
   name    = each.value.name
   ttl     = each.value.ttl
