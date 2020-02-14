@@ -15,10 +15,10 @@ output "records" {
 
 output "delegation_set_id" {
   description = "The ID of the created delegation set."
-  value       = try(aws_route53_delegation_set.delegation_set[0].id, "")
+  value       = try(aws_route53_delegation_set.delegation_set[var.name].id, "")
 }
 
 output "delegation_set_reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
-  value       = try(aws_route53_delegation_set.delegation_set[0].reference_name, "")
+  value       = try(aws_route53_delegation_set.delegation_set[var.name].reference_name, "")
 }
