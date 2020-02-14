@@ -1,13 +1,23 @@
 locals {
-  zones = map(var.name, var.name)
+  skip_zone_creation = length(local.zones) == 0
+  zones              = try(tolist(var.name), [tostring(var.name)], [])
+  delegation_set_id  = var.delegation_set_id != "" ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[0].id, null)
+
+  skip_delegation_set_creation = local.skip_zone_creation ? true : var.skip_delegation_set_creation
+}
+
+resource "aws_route53_delegation_set" "delegation_set" {
+  count = local.skip_delegation_set_creation ? 0 : 1
+
+  reference_name = try(coalesce(var.reference_name, local.zones[0]), null)
 }
 
 resource "aws_route53_zone" "zone" {
-  for_each = var.create ? local.zones : {}
+  for_each = toset(local.zones)
 
-  name              = var.name
+  name              = each.value
   force_destroy     = var.force_destroy
-  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[0].id, null)
+  delegation_set_id = local.delegation_set_id
 
   dynamic "vpc" {
     for_each = { for id in var.vpc_ids : id => id }
@@ -18,20 +28,31 @@ resource "aws_route53_zone" "zone" {
   }
 
   tags = merge(
-    { Name = var.name },
+    { Name = each.value },
     var.tags
   )
 }
 
-resource "aws_route53_delegation_set" "delegation_set" {
-  count = var.create && var.create_delegation_set ? 1 : 0
-
-  reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : var.name
-}
-
 locals {
-  records = {
-    for record in var.records : record.name => {
+  records_map = {
+    for record in var.records : "${record.type}-${record.name}" => record
+  }
+
+  records_by_name = {
+    for product in setproduct(local.zones, keys(local.records_map)) :
+    "${product[1]}-${product[0]}" => {
+      zone_id = aws_route53_zone.zone[product[0]].id
+      name    = local.records_map[product[1]].name
+      type    = local.records_map[product[1]].type
+      ttl     = try(local.records_map[product[1]].ttl, null)
+      records = try(local.records_map[product[1]].records, null)
+      alias   = try(local.records_map[product[1]].alias, {})
+    }
+  }
+
+  records_by_zone_id = {
+    for record in var.records : "${record.type}-${record.name}" => {
+      zone_id = var.zone_id
       name    = record.name
       type    = record.type
       ttl     = try(record.ttl, null)
@@ -39,12 +60,14 @@ locals {
       alias   = try(record.alias, {})
     }
   }
+
+  records = local.skip_zone_creation ? local.records_by_zone_id : local.records_by_name
 }
 
 resource "aws_route53_record" "record" {
-  for_each = var.create ? local.records : {}
+  for_each = local.records
 
-  zone_id = aws_route53_zone.zone[var.name].id
+  zone_id = each.value.zone_id
   type    = each.value.type
   name    = each.value.name
   ttl     = each.value.ttl
