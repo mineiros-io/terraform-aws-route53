@@ -169,3 +169,17 @@ variable "tags" {
 
   default = {}
 }
+
+variable "vpc_ids" {
+  description = "A list of IDs of VPCs to associate with a private hosted zone. Conflicts with the delegation_set_id."
+  type        = list(string)
+
+  # Example:
+  #
+  # vpc_ids = [
+  #   "vpc-56a5ec2c",
+  #   "vpc-23a7efga"
+  # ]
+
+  default = []
+}

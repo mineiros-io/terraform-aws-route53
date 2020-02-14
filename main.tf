@@ -1,5 +1,7 @@
 locals {
-  zones = map(replace(var.name, ".", "-"), var.name)
+  zones                 = map(replace(var.name, ".", "-"), var.name)
+  vpc_ids               = { for id in var.vpc_ids : id => id }
+  create_delegation_set = var.create_delegation_set && length(var.vpc_ids) == 0 && length(var.delegation_set_id) == 0
 }
 
 resource "aws_route53_zone" "zone" {
@@ -7,7 +9,15 @@ resource "aws_route53_zone" "zone" {
 
   name              = each.value
   force_destroy     = var.force_destroy
-  delegation_set_id = length(var.delegation_set_id) > 0 ? var.delegation_set_id : aws_route53_delegation_set.delegation_set[each.key].id
+  delegation_set_id = local.create_delegation_set ? try(var.delegation_set_id, aws_route53_delegation_set.delegation_set[each.key].id) : null
+
+  dynamic "vpc" {
+    for_each = local.vpc_ids
+
+    content {
+      vpc_id = vpc.value
+    }
+  }
 
   tags = merge(
     { Name = replace(each.value, ".", "-") },
@@ -16,7 +26,7 @@ resource "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
-  for_each = var.create_delegation_set && length(var.delegation_set_id) == 0 ? local.zones : {}
+  for_each = local.create_delegation_set ? local.zones : {}
 
   reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : each.key
 }
@@ -66,9 +76,9 @@ resource "aws_route53_record" "record" {
     for_each = each.value.alias
 
     content {
-      name                   = each.value.alias.name
-      zone_id                = each.value.alias.zone_id
-      evaluate_target_health = each.value.alias.evaluate_target_health
+      name                   = alias.value.alias.name
+      zone_id                = alias.value.alias.zone_id
+      evaluate_target_health = alias.value.alias.evaluate_target_health
     }
   }
 }
