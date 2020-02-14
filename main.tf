@@ -1,9 +1,13 @@
+locals {
+  zones = map(var.name, var.name)
+}
+
 resource "aws_route53_zone" "zone" {
-  count = var.create ? 1 : 0
+  for_each = var.create ? local.zones : {}
 
   name              = var.name
   force_destroy     = var.force_destroy
-  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[var.name].id, null)
+  delegation_set_id = length(var.vpc_ids) == 0 && length(var.delegation_set_id) > 0 ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[0].id, null)
 
   dynamic "vpc" {
     for_each = { for id in var.vpc_ids : id => id }
@@ -20,7 +24,7 @@ resource "aws_route53_zone" "zone" {
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
-  for_each = var.create && var.create_delegation_set ? map(var.name, var.name) : {}
+  count = var.create && var.create_delegation_set ? 1 : 0
 
   reference_name = length(var.delegation_set_reference_name) > 0 ? var.delegation_set_reference_name : var.name
 }
@@ -40,7 +44,7 @@ locals {
 resource "aws_route53_record" "record" {
   for_each = var.create ? local.records : {}
 
-  zone_id = aws_route53_zone.zone[0].id
+  zone_id = aws_route53_zone.zone[var.name].id
   type    = each.value.type
   name    = each.value.name
   ttl     = each.value.ttl

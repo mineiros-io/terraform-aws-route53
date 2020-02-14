@@ -4,7 +4,7 @@ resource "aws_route53_record" "google_mail_mx" {
 
   name    = ""
   type    = "MX"
-  zone_id = aws_route53_zone.zone[0].id
+  zone_id = aws_route53_zone.zone[var.name].id
   ttl     = var.google_mail_mx_ttl
 
   records = [
@@ -22,7 +22,7 @@ resource "aws_route53_record" "google_suite_aliases" {
 
   name    = each.value
   type    = "CNAME"
-  zone_id = aws_route53_zone.zone[0].zone_id
+  zone_id = aws_route53_zone.zone[var.name].zone_id
   ttl     = 3600
 
   records = ["ghs.googlehosted.com"]
@@ -35,7 +35,7 @@ resource "aws_route53_record" "google_spf" {
 
   name    = ""
   type    = "SPF"
-  zone_id = aws_route53_zone.zone[0].id
+  zone_id = aws_route53_zone.zone[var.name].id
   ttl     = 3600
 
   records = ["v=spf1 include:_spf.google.com ~all"]
@@ -48,7 +48,7 @@ resource "aws_route53_record" "google_dkim" {
 
   name    = each.key
   type    = "TXT"
-  zone_id = aws_route53_zone.zone[0].id
+  zone_id = aws_route53_zone.zone[var.name].id
   ttl     = 3600
 
   records = [each.value]
