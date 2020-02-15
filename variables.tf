@@ -14,7 +14,7 @@
 variable "name" {
   description = "This is the name of the hosted zone."
   type        = any
-  default     = ""
+  default     = null
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

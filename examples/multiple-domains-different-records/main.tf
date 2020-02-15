@@ -16,7 +16,7 @@ module "zones" {
 module "mineiros-io" {
   source = "../.."
 
-  zone_id = module.zones["mineiros.io"].zone_id
+  zone_id = module.zones.zone["mineiros.io"].zone_id
 
   records = [
     {
@@ -43,7 +43,7 @@ module "mineiros-io" {
 module "mineiros-com" {
   source = "../.."
 
-  zone_id = module.zones["mineiros.com"].zone_id
+  zone_id = module.zones.zone["mineiros.com"].zone_id
 
   records = [
     {
