@@ -13,7 +13,8 @@
 
 variable "name" {
   description = "This is the name of the hosted zone."
-  type        = string
+  type        = any
+  default     = null
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -45,7 +46,7 @@ variable "create_google_spf" {
   default     = false
 }
 
-variable "create_delegation_set" {
+variable "skip_delegation_set_creation" {
   description = "Whether or not to create a delegation set and associate with the created zone."
   type        = bool
   default     = false
@@ -57,7 +58,7 @@ variable "delegation_set_id" {
   default     = ""
 }
 
-variable "delegation_set_reference_name" {
+variable "reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
   default     = ""
@@ -166,4 +167,14 @@ variable "vpc_ids" {
   # ]
 
   default = []
+}
+
+variable "zone_id" {
+  description = "a zone ID to create the records in"
+  type        = string
+  default     = ""
+
+  # Example:
+  #
+  # zone_id = "zoneid"
 }
