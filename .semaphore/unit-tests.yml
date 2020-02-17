@@ -1,0 +1,18 @@
+version: v1.0
+name: "Promotions and Auto-promotions"
+agent:
+  machine:
+    type: e1-standard-2
+    os_image: ubuntu1804
+blocks:
+  - name: "Unit Tests"
+    task:
+      secrets:
+        - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
+      prologue:
+        commands:
+          - checkout --use-cache
+      jobs:
+        - name: "Run Go Tests"
+          commands:
+            - make docker/unit-tests
