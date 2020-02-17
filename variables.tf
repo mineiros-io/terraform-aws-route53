@@ -120,7 +120,7 @@ variable "records" {
   #
   # records = [
   #   {
-  #     name = "www.example.com"
+  #     name = "example.com"
   #     type = "A"
   #     ttl  = 300
   #     records = [
@@ -135,7 +135,17 @@ variable "records" {
   #     records = [
   #       "example.com"
   #     ]
-  #   }
+  #   },
+  #   {
+  #     name = "dev"
+  #     type = "CNAME"
+  #     alias = {
+  #        name                   = aws_elb.main.dns_name
+  #        zone_id                = aws_elb.main.zone_id
+  #        evaluate_target_health = true
+  #
+  #     }
+  #   },
   # ]
 
   default = []

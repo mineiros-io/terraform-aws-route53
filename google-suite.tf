@@ -51,5 +51,7 @@ resource "aws_route53_record" "google_dkim" {
   zone_id = aws_route53_zone.zone[var.name].id
   ttl     = 3600
 
-  records = [each.value]
+  records = [
+    length(regexall("(\\\"\\\")", each.value)) == 0 ? join("\"\"", compact(split("{SPLITHERE}", replace(each.value, "/(.{255})/", "$1{SPLITHERE}")))) : each.value
+  ]
 }
