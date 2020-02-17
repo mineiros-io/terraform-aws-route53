@@ -55,7 +55,14 @@ locals {
       zone_id = aws_route53_zone.zone[product[0]].id
       name    = local.records_transposed[product[1]].name
       type    = local.records_transposed[product[1]].type
-      ttl     = try(local.records_transposed[product[1]].ttl, null)
+
+      # TTL conflicts with Alias records. If no alias is set, we should either use the ttl defined with the current
+      # record or fall back to the default TTL that is configurable with var.default_ttl
+      ttl = local.records_transposed[product[1]].alias == null ? try(
+        local.records_transposed[product[1]].ttl == null ? var.default_ttl : local.records_transposed[product[1]].ttl,
+        var.default_ttl
+      ) : null
+
       # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
       # each 255 characters long. Hence, we split up the passed records for TXT records.
       records = try([for record in local.records_transposed[product[1]].records :
