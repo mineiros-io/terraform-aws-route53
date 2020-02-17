@@ -52,9 +52,13 @@ locals {
   records_by_name = var.create ? {
     for product in setproduct(local.zones, keys(local.records_transposed)) :
     "${product[1]}-${product[0]}" => {
-      zone_id = aws_route53_zone.zone[product[0]].id
-      name    = local.records_transposed[product[1]].name
-      type    = local.records_transposed[product[1]].type
+
+      # We need to wrap the reference to aws_route53_zone inside a try to avoid exceptations that might occur when we
+      # run terraform destroy without running a successful terraform apply before.
+      zone_id = try(aws_route53_zone.zone[product[0]].id, null)
+
+      name = local.records_transposed[product[1]].name
+      type = local.records_transposed[product[1]].type
 
       # TTL conflicts with Alias records. If no alias is set, we should either use the ttl defined with the current
       # record or fall back to the default TTL that is configurable with var.default_ttl
