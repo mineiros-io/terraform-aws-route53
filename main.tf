@@ -56,8 +56,13 @@ locals {
       name    = local.records_transposed[product[1]].name
       type    = local.records_transposed[product[1]].type
       ttl     = try(local.records_transposed[product[1]].ttl, null)
-      records = try(local.records_transposed[product[1]].records, null)
-      alias   = try(local.records_transposed[product[1]].alias, {})
+      # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
+      # each 255 characters long. Hence, we split up the passed records for TXT records.
+      records = try([for record in local.records_transposed[product[1]].records :
+        local.records_transposed[product[1]].type == "TXT" && length(regexall("(\\\"\\\")", record)) == 0 ?
+        join("\"\"", compact(split("{SPLITHERE}", replace(record, "/(.{255})/", "$1{SPLITHERE}")))) : record
+      ], null)
+      alias = try(local.records_transposed[product[1]].alias, {})
     }
   }
 
