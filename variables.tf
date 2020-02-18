@@ -55,7 +55,7 @@ variable "default_ttl" {
 variable "delegation_set_id" {
   description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "force_destroy" {
