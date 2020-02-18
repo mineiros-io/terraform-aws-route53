@@ -18,6 +18,7 @@ resource "aws_route53_zone" "zone" {
   for_each = var.create ? toset(local.zones) : []
 
   name              = each.value
+  comment           = var.comment
   force_destroy     = var.force_destroy
   delegation_set_id = local.delegation_set_id
 
