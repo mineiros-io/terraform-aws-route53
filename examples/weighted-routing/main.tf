@@ -19,7 +19,7 @@ provider "aws" {
 # The first record points to our production system to which we want to route 90% of our traffic. The second record
 # points to our preview system and we only want to route 10% of our traffic to that system.
 #
-# For more information on weighted route policies with Route53, please check AWSs docs:
+# For more information on weighted route policies with Route53, please check the related documentation:
 # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted
 # ---------------------------------------------------------------------------------------------------------------------
 
