@@ -1,6 +1,6 @@
 # Create Google Mail MX entries
 resource "aws_route53_record" "google_mail_mx" {
-  count = var.create && var.create_google_mail_mx ? 1 : 0
+  count = var.enable_module && var.create_google_mail_mx ? 1 : 0
 
   name    = ""
   type    = "MX"
@@ -18,7 +18,7 @@ resource "aws_route53_record" "google_mail_mx" {
 
 # Create a range of CNAMES records for Google Suite Services
 resource "aws_route53_record" "google_suite_aliases" {
-  for_each = var.create ? var.google_suite_services_custom_aliases : {}
+  for_each = var.enable_module ? var.google_suite_services_custom_aliases : {}
 
   name    = each.value
   type    = "CNAME"
@@ -31,7 +31,7 @@ resource "aws_route53_record" "google_suite_aliases" {
 # Create a SPF record to prevent email spoofing
 # Notice that you need to verify the SPF record: https://support.google.com/a/answer/33786?hl=en
 resource "aws_route53_record" "google_spf" {
-  count = var.create && var.create_google_spf ? 1 : 0
+  count = var.enable_module && var.create_google_spf ? 1 : 0
 
   name    = ""
   type    = "SPF"
@@ -44,7 +44,7 @@ resource "aws_route53_record" "google_spf" {
 # Create the DKIM record to enhance security for outgoing email
 # Notice that you need to verify the DKIM record: https://support.google.com/a/answer/174126?hl=en
 resource "aws_route53_record" "google_dkim" {
-  for_each = var.create ? var.google_mail_dkim : {}
+  for_each = var.enable_module ? var.google_mail_dkim : {}
 
   name    = each.key
   type    = "TXT"

@@ -5,7 +5,7 @@ locals {
 
   run_in_vpc = length(var.vpc_ids) > 0
 
-  skip_delegation_set_creation = ! var.create || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
+  skip_delegation_set_creation = ! var.enable_module || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
 }
 
 resource "aws_route53_delegation_set" "delegation_set" {
@@ -15,7 +15,7 @@ resource "aws_route53_delegation_set" "delegation_set" {
 }
 
 resource "aws_route53_zone" "zone" {
-  for_each = var.create ? toset(local.zones) : []
+  for_each = var.enable_module ? toset(local.zones) : []
 
   name              = each.value
   comment           = var.comment
@@ -50,7 +50,7 @@ locals {
     for record in local.records_expanded : record.record_id => record
   }
 
-  records_by_name = var.create ? {
+  records_by_name = var.enable_module ? {
     for product in setproduct(local.zones, keys(local.records_transposed)) :
     "${product[1]}-${product[0]}" => {
 
@@ -93,7 +93,7 @@ locals {
 }
 
 resource "aws_route53_record" "record" {
-  for_each = var.create ? local.records : {}
+  for_each = var.enable_module ? local.records : {}
 
   zone_id = each.value.zone_id
   type    = each.value.type

@@ -22,12 +22,6 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "create" {
-  description = "Whether to create the Route53 Zone and it's associated resources."
-  type        = bool
-  default     = true
-}
-
 variable "comment" {
   description = "A comment for the hosted zone."
   type        = string
@@ -56,6 +50,12 @@ variable "delegation_set_id" {
   description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
   type        = string
   default     = null
+}
+
+variable "enable_module" {
+  description = "Whether to enable the module and to create the Route53 Zone and it's associated resources."
+  type        = bool
+  default     = true
 }
 
 variable "force_destroy" {
