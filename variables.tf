@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
-# Define these secrets as environment variables
+# Define these secrets as environment variables.
 # ---------------------------------------------------------------------------------------------------------------------
 
 # AWS_ACCESS_KEY_ID

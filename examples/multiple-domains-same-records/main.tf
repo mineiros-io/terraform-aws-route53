@@ -13,8 +13,8 @@ module "zones" {
   name = ["mineiros.io", "mineiros.com"]
   records = [
     {
-      type = "A"
       name = "testing"
+      type = "A"
       ttl  = 3600
       records = [
         "172.217.16.209"

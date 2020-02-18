@@ -39,10 +39,12 @@ resource "aws_route53_zone" "zone" {
 locals {
   records_expanded = [
     for record in var.records : merge({
-      record_id = join("-", compact([lower(record.type), lower(record.name)]))
-      ttl       = null
-      records   = null
-      alias     = null
+      record_id      = join("-", compact([lower(record.type), lower(record.name), try("${lower(record.set_identifier)}-${lower(record.weight)}", null)]))
+      ttl            = null
+      records        = null
+      alias          = null
+      set_identifier = null
+      weight         = null
     }, record)
   ]
 
@@ -68,24 +70,30 @@ locals {
         var.default_ttl
       ) : null
 
+      set_identifier = try(local.records_transposed[product[1]].set_identifier, null)
+      weight         = try(local.records_transposed[product[1]].weight, null)
+
       # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
       # each 255 characters long. Hence, we split up the passed records for TXT records.
       records = try([for record in local.records_transposed[product[1]].records :
         local.records_transposed[product[1]].type == "TXT" && length(regexall("(\\\"\\\")", record)) == 0 ?
         join("\"\"", compact(split("{SPLITHERE}", replace(record, "/(.{255})/", "$1{SPLITHERE}")))) : record
       ], null)
+
       alias = try(local.records_transposed[product[1]].alias, {})
     }
   } : {}
 
   records_by_zone_id = {
     for record in local.records_transposed : record.record_id => {
-      zone_id = var.zone_id
-      name    = record.name
-      type    = record.type
-      ttl     = try(record.ttl, null)
-      records = try(record.records, null)
-      alias   = try(record.alias, {})
+      zone_id        = var.zone_id
+      name           = record.name
+      type           = record.type
+      ttl            = try(record.ttl, null)
+      set_identifier = try(record.set_identifier, null)
+      weight         = try(record.weight, null)
+      records        = try(record.records, null)
+      alias          = try(record.alias, {})
     }
   }
 
@@ -95,11 +103,20 @@ locals {
 resource "aws_route53_record" "record" {
   for_each = var.enable_module ? local.records : {}
 
-  zone_id = each.value.zone_id
-  type    = each.value.type
-  name    = each.value.name
-  ttl     = each.value.ttl
-  records = each.value.records
+  zone_id        = each.value.zone_id
+  type           = each.value.type
+  name           = each.value.name
+  ttl            = each.value.ttl
+  records        = each.value.records
+  set_identifier = each.value.set_identifier
+
+  dynamic "weighted_routing_policy" {
+    for_each = each.value.weight == null ? [] : [each.value.weight]
+
+    content {
+      weight = weighted_routing_policy.value
+    }
+  }
 
   dynamic "alias" {
     for_each = each.value.alias == null ? [] : [each.value.alias]
