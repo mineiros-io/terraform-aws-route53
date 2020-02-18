@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# ROUTE53 ZONE WITH TWO WEIGHTED RECORDS
+# CREATE A ROUTE53 ZONE AND ASSOCIATE TWO WEIGHTES RECORDS
 #
 # Weighted routing lets you associate multiple resources with a single domain name (example.com) or subdomain name
 # (acme.example.com) and choose how much traffic is routed to each resource. This can be useful for a variety of
@@ -23,13 +23,13 @@ provider "aws" {
 # https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted
 # ---------------------------------------------------------------------------------------------------------------------
 
-module "weighted-routing" {
+module "route53" {
   source = "../.."
 
-  name                         = "mineiros.io"
-  skip_delegation_set_creation = true
+  name                         = var.zone_name
+  skip_delegation_set_creation = var.skip_delegation_set_creation
 
-  records = [
+  weighted_records = [
     {
       type           = "A"
       weight         = 90
@@ -46,6 +46,16 @@ module "weighted-routing" {
         "216.239.32.118"
       ]
     },
+  ]
+
+  records = [
+    {
+      name = "dev"
+      type = "CNAME"
+      records = [
+        "216.239.32.119"
+      ]
+    }
   ]
 
 }

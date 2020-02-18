@@ -12,9 +12,14 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "This is the name of the hosted zone."
+  description = "The name of the hosted zone. To create multiple zones at once, pass a list of names [\"zone1\", \"zone2\"]."
   type        = any
-  default     = null
+
+  # Examples:
+  #
+  # Single:   name = "example.com"
+  # Multiple: name = ["example.com", "example.io"]
+  default = null
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -145,6 +150,31 @@ variable "records" {
   default = []
 }
 
+variable "failover_records" {
+  description = "A list of failover records to create in the Hosted Zone."
+  type        = any
+
+  # Example:
+  #
+  # failover_records = [
+  #     {
+  #       type            = "A"
+  #       set_identifier  = "prod"
+  #       failover        = "PRIMARY"
+  #       health_check_id = "A24GBC23AFGH"
+  #       records         = ["172.217.22.99"]
+  #     },
+  #     {
+  #       type            = "A"
+  #       set_identifier  = "prod"
+  #       failover        = "SECONDARY"
+  #       records         = ["172.217.22.100"]
+  #     }
+  # ]
+
+  default = []
+}
+
 variable "reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
@@ -180,6 +210,34 @@ variable "vpc_ids" {
   # vpc_ids = [
   #   "vpc-56a5ec2c",
   #   "vpc-23a7efga"
+  # ]
+
+  default = []
+}
+
+variable "weighted_records" {
+  description = "A list of weighted records to create in the Hosted Zone."
+  type        = any
+
+  # Example:
+  #
+  # weighted_records = [
+  #   {
+  #     type           = "A"
+  #     weight         = 90
+  #     set_identifier = "prod"
+  #     records = [
+  #       "216.239.32.117"
+  #     ]
+  #   },
+  #   {
+  #     type           = "A"
+  #     weight         = 10
+  #     set_identifier = "preview"
+  #     records = [
+  #       "216.239.32.118"
+  #     ]
+  #   }
   # ]
 
   default = []

@@ -17,7 +17,19 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "aws_region" {
-  description = "The AWS region in which all resources will be created"
+  description = "The AWS region in which all resources will be created."
   type        = string
   default     = "us-east-1"
+}
+
+variable "skip_delegation_set_creation" {
+  description = "Whether or not to create a delegation set and associate with the created zone."
+  type        = bool
+  default     = true
+}
+
+variable "zone_name" {
+  description = "The name of the hosted zone."
+  type        = string
+  default     = "mineiros.io"
 }
