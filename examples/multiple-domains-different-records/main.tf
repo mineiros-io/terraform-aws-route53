@@ -3,7 +3,6 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  # The AWS region in which all resources will be created
   region = var.aws_region
 }
 

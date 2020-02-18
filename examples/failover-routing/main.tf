@@ -23,55 +23,38 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_health_check" "primary" {
-  fqdn              = "test.mineiros.io"
-  port              = 80
-  type              = "HTTP"
-  resource_path     = "/"
-  failure_threshold = "5"
-  request_interval  = "30"
+  fqdn              = var.zone_name
+  port              = var.health_check_port
+  type              = var.health_check_protocol
+  resource_path     = var.health_check_resource_path
+  failure_threshold = var.health_check_failure_threshold
+  request_interval  = var.health_check_request_interval
 
   tags = {
-    Name = "test-mineiros-io-primary-healthcheck"
+    Name = "${replace(var.zone_name, ".", "-")}-primary-healthcheck"
   }
 }
 
-resource "aws_route53_health_check" "secondary" {
-  fqdn              = "test.mineiros.io"
-  port              = 80
-  type              = "HTTP"
-  resource_path     = "/"
-  failure_threshold = "5"
-  request_interval  = "30"
-
-  tags = {
-    Name = "test-mineiros-io-secondary-healthcheck"
-  }
-}
-
-module "mineiros-io" {
+module "route53" {
   source = "../.."
 
-  name = "test.mineiros.io"
+  name                         = var.zone_name
+  skip_delegation_set_creation = var.skip_delegation_set_creation
 
-  records = [
+  failover_records = [
     {
-      type            = "A"
-      set_identifier  = "prod"
-      failover        = "PRIMARY"
+      type           = "A"
+      set_identifier = "prod"
+      failover       = "PRIMARY"
+      # Non-alias primary records must have an associated health check
       health_check_id = aws_route53_health_check.primary.id
-      records = [
-        "172.217.16.174"
-      ]
+      records         = var.primary_record_records
     },
     {
-      type            = "A"
-      set_identifier  = "prod"
-      failover        = "SECONDARY"
-      health_check_id = aws_route53_health_check.secondary.id
-      records = [
-        "172.217.22.99",
-        "172.217.22.100"
-      ]
+      type           = "A"
+      set_identifier = "prod"
+      failover       = "SECONDARY"
+      records        = var.secondary_record_records
     }
   ]
 }

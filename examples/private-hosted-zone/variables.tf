@@ -17,7 +17,28 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "aws_region" {
-  description = "The AWS region in which all resources will be created"
+  description = "The AWS region in which all resources will be created."
   type        = string
   default     = "us-east-1"
+}
+
+variable "route53_record_ttl" {
+  description = "The TTL of the record."
+  type        = number
+  default     = 3600
+}
+
+variable "route53_record_records" {
+  description = "The records for the A record."
+  type        = any
+  default = [
+    "172.217.16.206",
+    "172.217.18.163"
+  ]
+}
+
+variable "zone_name" {
+  description = "The name of the hosted zone."
+  type        = string
+  default     = "mineiros.io"
 }

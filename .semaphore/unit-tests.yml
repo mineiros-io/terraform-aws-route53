@@ -1,5 +1,5 @@
 version: v1.0
-name: "Promotions and Auto-promotions"
+name: "Terraform-Module-Route53 Promotions and Auto-promotions"
 agent:
   machine:
     type: e1-standard-2
@@ -13,6 +13,6 @@ blocks:
         commands:
           - checkout --use-cache
       jobs:
-        - name: "Run Go Tests"
+        - name: "Run All Go Tests"
           commands:
             - make docker/unit-tests

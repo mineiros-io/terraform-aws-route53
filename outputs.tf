@@ -5,7 +5,7 @@ output "zone" {
 
 output "records" {
   description = "A list of all created records."
-  value       = aws_route53_record.record
+  value       = merge(aws_route53_record.record, aws_route53_record.weighted_record, aws_route53_record.failover_record)
 }
 
 output "delegation_set" {

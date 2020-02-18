@@ -5,12 +5,12 @@ import (
 	"testing"
 )
 
-func TestFailover(t *testing.T) {
+func TestFailoverRouting(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "../examples/failover",
+		TerraformDir: "../examples/failover-routing",
 		Upgrade:      true,
 	}
 

@@ -39,22 +39,12 @@ resource "aws_route53_zone" "zone" {
 locals {
   records_expanded = [
     for record in var.records : merge({
-      record_id = join("-",
-        compact([
-          lower(record.type),
-          try(lower(record.name), ""),
-          try(lower(record.set_identifier), "")]
-        )
-      )
-
+      record_id       = join("-", compact([lower(record.type), try(lower(record.name), ""), ]))
       name            = ""
       ttl             = null
       records         = null
       alias           = null
       allow_overwrite = null
-      set_identifier  = null
-      weight          = null
-      failover        = null
       health_check_id = null
     }, record)
   ]
@@ -73,6 +63,7 @@ locals {
       name            = local.records_transposed[product[1]].name
       type            = local.records_transposed[product[1]].type
       allow_overwrite = local.records_transposed[product[1]].allow_overwrite
+      health_check_id = try(local.records_transposed[product[1]].health_check_id, null)
 
       # TTL conflicts with Alias records. If no alias is set, we should either use the ttl defined with the current
       # record or fall back to the default TTL that is configurable with var.default_ttl
@@ -81,12 +72,7 @@ locals {
         var.default_ttl
       ) : null
 
-      set_identifier  = try(local.records_transposed[product[1]].set_identifier, null)
-      weight          = try(local.records_transposed[product[1]].weight, null)
-      failover        = try(local.records_transposed[product[1]].failover, null)
-      health_check_id = try(local.records_transposed[product[1]].health_check_id, null)
-
-      # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
+      # The DNS protocol has a 255 character limit per string. However, each TXT record can have multiple strings,
       # each 255 characters long. Hence, we split up the passed records for TXT records.
       records = try([for record in local.records_transposed[product[1]].records :
         local.records_transposed[product[1]].type == "TXT" && length(regexall("(\\\"\\\")", record)) == 0 ?
@@ -104,9 +90,6 @@ locals {
       type            = record.type
       allow_overwrite = record.allow_overwrite
       ttl             = try(record.ttl, null)
-      set_identifier  = try(record.set_identifier, null)
-      weight          = try(record.weight, null)
-      failover        = try(record.failover, null)
       health_check_id = try(record.health_check_id, null)
       records         = try(record.records, null)
       alias           = try(record.alias, {})
@@ -125,24 +108,7 @@ resource "aws_route53_record" "record" {
   name            = each.value.name
   ttl             = each.value.ttl
   records         = each.value.records
-  set_identifier  = each.value.set_identifier
   health_check_id = each.value.health_check_id
-
-  dynamic "failover_routing_policy" {
-    for_each = each.value.failover == null ? [] : [each.value.failover]
-
-    content {
-      type = failover_routing_policy.value
-    }
-  }
-
-  dynamic "weighted_routing_policy" {
-    for_each = each.value.weight == null ? [] : [each.value.weight]
-
-    content {
-      weight = weighted_routing_policy.value
-    }
-  }
 
   dynamic "alias" {
     for_each = each.value.alias == null ? [] : [each.value.alias]

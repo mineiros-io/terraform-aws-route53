@@ -3,7 +3,6 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  # The AWS region in which all resources will be created
   region = var.aws_region
 }
 
@@ -38,8 +37,8 @@ module "route53" {
       ]
     },
     {
-      # This record doesn't have ttl set explicitly, therefore it will assume the default ttl that is configurable
-      # through var.default_ttl
+      # This record doesn't have a explicitly TTL set. Therefore it will assume the default TTL that is configurable
+      # through var.default_ttl.
       name = "testing.mineiros.io"
       type = "A"
       records = [
