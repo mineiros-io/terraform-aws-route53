@@ -31,7 +31,6 @@ module "weighted-routing" {
 
   records = [
     {
-      name           = ""
       type           = "A"
       weight         = 90
       set_identifier = "prod"
@@ -40,7 +39,6 @@ module "weighted-routing" {
       ]
     },
     {
-      name           = ""
       type           = "A"
       weight         = 10
       set_identifier = "preview"

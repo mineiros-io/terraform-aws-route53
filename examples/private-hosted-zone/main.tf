@@ -14,14 +14,11 @@ resource "aws_default_vpc" "default" {
   }
 }
 
-locals {
-  main_domain = "mineiros.dev"
-}
-
 module "private-hosted-zone" {
   source = "../.."
 
-  name = local.main_domain
+  name = "mineiros.dev"
+
   vpc_ids = [
     aws_default_vpc.default.id
   ]
@@ -29,7 +26,6 @@ module "private-hosted-zone" {
   records = [
     {
       type = "A"
-      name = local.main_domain
       ttl  = 3600
       records = [
         "172.217.16.209"

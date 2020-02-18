@@ -28,21 +28,22 @@ module "route53" {
 
   records = [
     {
+      # We don't explicitly need to set a name if the record matches the zone
+      # name = "mineiros.io"
+      type = "A"
+      ttl  = 300
+      records = [
+        "172.217.16.206",
+        "172.217.18.163"
+      ]
+    },
+    {
       # This record doesn't have ttl set explicitly, therefore it will assume the default ttl that is configurable
       # through var.default_ttl
       name = "testing.mineiros.io"
       type = "A"
       records = [
         "172.217.16.209"
-      ]
-    },
-    {
-      name = "mineiros.io"
-      type = "A"
-      ttl  = 300
-      records = [
-        "172.217.16.206",
-        "172.217.18.163"
       ]
     },
     {

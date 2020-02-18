@@ -20,7 +20,6 @@ module "mineiros-io" {
 
   records = [
     {
-      name = ""
       type = "A"
       ttl  = 300
       records = [
@@ -29,7 +28,6 @@ module "mineiros-io" {
       ]
     },
     {
-      name = ""
       type = "TXT"
       ttl  = 300
       records = [
@@ -47,7 +45,6 @@ module "mineiros-com" {
 
   records = [
     {
-      name = ""
       type = "A"
       ttl  = 300
       records = [

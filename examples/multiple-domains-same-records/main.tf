@@ -21,7 +21,6 @@ module "zones" {
       ]
     },
     {
-      name = ""
       type = "A"
       ttl  = 300
       records = [
@@ -30,7 +29,6 @@ module "zones" {
       ]
     },
     {
-      name = ""
       type = "TXT"
       ttl  = 300
       records = [
