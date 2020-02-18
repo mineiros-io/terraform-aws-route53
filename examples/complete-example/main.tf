@@ -28,9 +28,10 @@ module "route53" {
 
   records = [
     {
+      # This record doesn't have ttl set explicitly, therefore it will assume the default ttl that is configurable
+      # through var.default_ttl
       type = "A"
       name = "testing.mineiros.io"
-      ttl  = 3600
       records = [
         "172.217.16.209"
       ]

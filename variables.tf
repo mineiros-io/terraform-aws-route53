@@ -22,12 +22,6 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
-variable "create" {
-  description = "Whether to create the Route53 Zone and it's associated resources."
-  type        = bool
-  default     = true
-}
-
 variable "comment" {
   description = "A comment for the hosted zone."
   type        = string
@@ -46,22 +40,28 @@ variable "create_google_spf" {
   default     = false
 }
 
-variable "skip_delegation_set_creation" {
-  description = "Whether or not to create a delegation set and associate with the created zone."
-  type        = bool
-  default     = false
+variable "default_ttl" {
+  description = "The default TTL ( Time to Live ) in seconds that will be used for all records that support the ttl parameter. Will be overwritten by the records ttl parameter if set."
+  type        = number
+  default     = 3600
 }
 
 variable "delegation_set_id" {
   description = "The ID of the reusable delegation set whose NS records you want to assign to the hosted zone."
   type        = string
-  default     = ""
+  default     = null
 }
 
-variable "reference_name" {
-  description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
-  type        = string
-  default     = ""
+variable "enable_module" {
+  description = "Whether to enable the module and to create the Route53 Zone and it's associated resources."
+  type        = bool
+  default     = true
+}
+
+variable "force_destroy" {
+  description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
+  type        = bool
+  default     = false
 }
 
 variable "google_mail_mx_ttl" {
@@ -81,12 +81,6 @@ variable "google_mail_dkim" {
   # }
 
   default = {}
-}
-
-variable "force_destroy" {
-  description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
-  type        = bool
-  default     = false
 }
 
 variable "google_suite_services_custom_aliases" {
@@ -149,6 +143,18 @@ variable "records" {
   # ]
 
   default = []
+}
+
+variable "reference_name" {
+  description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
+  type        = string
+  default     = ""
+}
+
+variable "skip_delegation_set_creation" {
+  description = "Whether or not to create a delegation set and associate with the created zone."
+  type        = bool
+  default     = false
 }
 
 variable "tags" {
