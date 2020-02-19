@@ -47,8 +47,8 @@ module "route53" {
 
   records = [
     {
+      type    = "A"
       name    = "dev"
-      type    = "CNAME"
       records = var.dev_targets
     }
   ]

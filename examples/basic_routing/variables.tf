@@ -30,7 +30,7 @@ variable "dev_ttl" {
 
 variable "dev_targets" {
   description = "The records for the dev. A record."
-  type        = any
+  type        = set(string)
   default = [
     "172.217.16.111",
   ]
@@ -44,7 +44,7 @@ variable "primary_ttl" {
 
 variable "primary_targets" {
   description = "The records for the primary A record."
-  type        = any
+  type        = set(string)
   default = [
     "172.217.16.206",
     "172.217.18.163"

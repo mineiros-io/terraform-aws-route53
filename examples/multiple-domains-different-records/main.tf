@@ -36,7 +36,7 @@ module "zone_a_records" {
       type = "TXT"
       ttl  = 300
       records = [
-        "Lorem ipsum",
+        "Lorem ipsum"
       ]
     }
   ]
@@ -53,7 +53,8 @@ module "zone_b_records" {
       type = "TXT"
       ttl  = 600
       records = [
-        "Lorem ipsum dolor sit amet",
+        "Lorem ipsum",
+        "Lorem ipsum dolor sit amet"
       ]
     }
   ]
