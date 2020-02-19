@@ -69,10 +69,8 @@ locals {
   }
 
   records_by_name = var.enable_module ? {
-    for product in setproduct(local.zones, keys(local.records)) : "${product[1]}-${product[0]}" => {
+    for product in setproduct(local.zones == [] ? [var.zone_id] : local.zones, keys(local.records)) : "${product[1]}-${product[0]}" => {
 
-      # We need to wrap the reference to aws_route53_zone inside a try to avoid exceptations that might occur when we
-      # run terraform destroy without running a successful terraform apply before.
       zone_id = var.zone_id != null ? var.zone_id : aws_route53_zone.zone[product[0]].id
 
       name            = local.records[product[1]].name
