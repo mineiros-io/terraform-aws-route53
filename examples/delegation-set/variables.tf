@@ -21,3 +21,15 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "main_zone_name" {
+  description = "The name for the main zone in that we will create the delegated set."
+  type        = string
+  default     = "mineiros.com"
+}
+
+variable "secondary_zone_name" {
+  description = "The name for the secondary zone. The secondary zone will use the delegated set that is created in the main zone."
+  type        = string
+  default     = "mineiros.io"
+}
