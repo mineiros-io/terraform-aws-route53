@@ -16,6 +16,7 @@ locals {
       record_id = join("-", compact([
         lower(record.type),
         try(lower(record.name), ""),
+        try(lower(record.set_identifier), ""),
         try(lower(record.failover), "")]
         )
       )
@@ -38,31 +39,24 @@ locals {
   failover_records_by_name = var.enable_module ? {
     for product in setproduct(local.zones, keys(local.failover_records_transposed)) : "${product[1]}-${product[0]}" => {
 
-      # We need to wrap the reference to aws_route53_zone inside a try to avoid exceptations that might occur when we
-      # run terraform destroy without running a successful terraform apply before.
-      zone_id = try(aws_route53_zone.zone[product[0]].id, null)
-
-      set_identifier  = local.failover_records_transposed[product[1]].set_identifier
-      failover        = local.failover_records_transposed[product[1]].failover
+      zone_id         = try(aws_route53_zone.zone[product[0]].id, null)
       name            = local.failover_records_transposed[product[1]].name
       type            = local.failover_records_transposed[product[1]].type
       allow_overwrite = local.failover_records_transposed[product[1]].allow_overwrite
 
-      # Healthchecks are mandatory for failover records
+      # Healthchecks and identifier are mandatory for failover records
       health_check_id = local.failover_records_transposed[product[1]].health_check_id
 
-      # TTL conflicts with Alias records. If no alias is set, we should either use the ttl defined with the current
-      # record or fall back to the default TTL that is configurable with var.default_ttl
+      set_identifier = local.failover_records_transposed[product[1]].set_identifier
+      failover       = local.failover_records_transposed[product[1]].failover
+      alias          = try(local.failover_records_transposed[product[1]].alias, {})
+
       ttl = local.failover_records_transposed[product[1]].alias == null ? try(
         local.failover_records_transposed[product[1]].ttl == null ? var.default_ttl : local.failover_records_transposed[product[1]].ttl,
         var.default_ttl
       ) : null
 
-      # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
-      # each 255 characters long. Hence, we split up the passed records for TXT records.
       records = try(local.failover_records_transposed[product[1]].records, null)
-
-      alias = try(local.failover_records_transposed[product[1]].alias, {})
     }
   } : {}
 
@@ -72,15 +66,20 @@ locals {
       name            = record.name
       type            = record.type
       allow_overwrite = record.allow_overwrite
-      ttl             = try(record.ttl, null)
-      set_identifier  = record.set_identifier
-      failover        = record.failover
 
-      # Healthchecks are mandatory for failover records
+      # Healthchecks and identifier are mandatory for failover records
       health_check_id = record.health_check_id
 
-      records = try(record.records, null)
-      alias   = try(record.alias, {})
+      set_identifier = record.set_identifier
+      failover       = record.failover
+      alias          = try(record.alias, {})
+
+      ttl = record.alias == null ? try(record.ttl == null ? var.default_ttl : record.ttl, var.default_ttl) : null
+
+      records = try([for r in record.records :
+        record.type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
+        join("\"\"", compact(split("{SPLITHERE}", replace(r, "/(.{255})/", "$1{SPLITHERE}")))) : r
+      ], null)
     }
   }
 

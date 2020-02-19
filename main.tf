@@ -113,10 +113,16 @@ locals {
       name            = record.name
       type            = record.type
       allow_overwrite = record.allow_overwrite
-      ttl             = try(record.ttl, null)
       health_check_id = try(record.health_check_id, null)
-      records         = try(record.records, null)
-      alias           = try(record.alias, {})
+
+      ttl = record.alias == null ? try(record.ttl == null ? var.default_ttl : record.ttl, var.default_ttl) : null
+
+      records = try([for r in record.records :
+        record.type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
+        join("\"\"", compact(split("{SPLITHERE}", replace(r, "/(.{255})/", "$1{SPLITHERE}")))) : r
+      ], null)
+
+      alias = try(record.alias, {})
     }
   }
 

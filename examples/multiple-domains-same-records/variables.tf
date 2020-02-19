@@ -30,7 +30,7 @@ variable "testing_ttl" {
 
 variable "testing_targets" {
   description = "The records for the testing A record."
-  type        = any
+  type        = set(string)
   default = [
     "172.217.16.111"
   ]
@@ -44,7 +44,7 @@ variable "primary_ttl" {
 
 variable "primary_targets" {
   description = "The records for the primary A record."
-  type        = any
+  type        = set(string)
   default = [
     "172.217.16.206",
     "172.217.18.163"
@@ -53,7 +53,7 @@ variable "primary_targets" {
 
 variable "primary_txt_targets" {
   description = "The records for the primary TXT record."
-  type        = any
+  type        = set(string)
   default = [
     "Lorem ipsum"
   ]

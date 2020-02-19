@@ -50,6 +50,6 @@ module "route53" {
       records = [
         "dev.${var.zone_name}"
       ]
-    },
+    }
   ]
 }

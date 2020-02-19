@@ -23,20 +23,24 @@ variable "aws_region" {
 }
 
 variable "dev_targets" {
-  description = ""
-  type        = any
-  default     = ["216.239.32.116"]
+  description = "The records for the dev A record."
+  type        = set(string)
+  default = [
+    "216.239.32.116"
+  ]
 }
 
 variable "preview_targets" {
-  description = ""
-  type        = any
-  default     = ["216.239.32.117"]
+  description = "The records for the preview A record."
+  type        = set(string)
+  default = [
+    "216.239.32.117"
+  ]
 }
 
 variable "prod_targets" {
-  description = ""
-  type        = any
+  description = "The records for the production A record."
+  type        = set(string)
   default = [
     "216.239.32.118",
     "216.239.32.119"
