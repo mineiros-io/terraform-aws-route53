@@ -1,3 +1,15 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE ROUTE53 WEIGHTED RECORDS
+#
+# If defined in var.weighted_records, we prepare and create the weighted records.
+# Please see the docs for more information on weighted records with Route53:
+# https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Prepare the records
+# ---------------------------------------------------------------------------------------------------------------------
+
 locals {
   weighted_records_expanded = [
     for record in var.weighted_records : merge({
@@ -72,6 +84,10 @@ locals {
 
   weighted_records = local.skip_zone_creation ? local.weighted_records_by_zone_id : local.weighted_records_by_name
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the records
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "weighted_record" {
   for_each = var.enable_module ? local.weighted_records : {}

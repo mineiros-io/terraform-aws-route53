@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestCompleteExample(t *testing.T) {
+func TestBasicRouting(t *testing.T) {
 	t.Parallel()
 
 	terraformOptions := &terraform.Options{

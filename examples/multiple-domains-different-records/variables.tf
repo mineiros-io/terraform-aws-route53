@@ -21,3 +21,15 @@ variable "aws_region" {
   type        = string
   default     = "us-east-1"
 }
+
+variable "zone_a" {
+  description = "The name of the first zone to create."
+  type        = string
+  default     = "mineiros.io"
+}
+
+variable "zone_b" {
+  description = "The name of the second zone to create."
+  type        = string
+  default     = "mineiros.com"
+}

@@ -22,6 +22,27 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "dev_targets" {
+  description = ""
+  type        = any
+  default     = ["216.239.32.116"]
+}
+
+variable "preview_targets" {
+  description = ""
+  type        = any
+  default     = ["216.239.32.117"]
+}
+
+variable "prod_targets" {
+  description = ""
+  type        = any
+  default = [
+    "216.239.32.118",
+    "216.239.32.119"
+  ]
+}
+
 variable "skip_delegation_set_creation" {
   description = "Whether or not to create a delegation set and associate with the created zone."
   type        = bool

@@ -22,13 +22,13 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "route53_record_ttl" {
+variable "record_ttl" {
   description = "The TTL of the record."
   type        = number
   default     = 3600
 }
 
-variable "route53_record_records" {
+variable "record_records" {
   description = "The records for the A record."
   type        = any
   default = [

@@ -29,32 +29,27 @@ module "route53" {
   name                         = var.zone_name
   skip_delegation_set_creation = var.skip_delegation_set_creation
 
+  # We send 90% of our traffic to the prod system and 10% of our traffic to the preview system
   weighted_records = [
     {
       type           = "A"
-      weight         = 90
       set_identifier = "prod"
-      records = [
-        "216.239.32.117"
-      ]
+      weight         = 90
+      records        = var.prod_targets
     },
     {
       type           = "A"
-      weight         = 10
       set_identifier = "preview"
-      records = [
-        "216.239.32.118"
-      ]
-    },
+      weight         = 10
+      records        = var.preview_targets
+    }
   ]
 
   records = [
     {
-      name = "dev"
-      type = "CNAME"
-      records = [
-        "216.239.32.119"
-      ]
+      name    = "dev"
+      type    = "CNAME"
+      records = var.dev_targets
     }
   ]
 

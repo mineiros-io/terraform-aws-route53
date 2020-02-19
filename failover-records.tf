@@ -1,3 +1,15 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE ROUTE53 FAILOVER RECORDS
+#
+# If defined in var.weighted_records, we prepare and create the failover records.
+# Please see the docs for more information on failover records with Route53:
+# https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-failover
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Prepare the records
+# ---------------------------------------------------------------------------------------------------------------------
+
 locals {
   failover_records_expanded = [
     for record in var.failover_records : merge({
@@ -48,10 +60,7 @@ locals {
 
       # The DNS protocol has a 255 character limit per string, however, each TXT record can have multiple strings,
       # each 255 characters long. Hence, we split up the passed records for TXT records.
-      records = try([for record in local.failover_records_transposed[product[1]].records :
-        local.failover_records_transposed[product[1]].type == "TXT" && length(regexall("(\\\"\\\")", record)) == 0 ?
-        join("\"\"", compact(split("{SPLITHERE}", replace(record, "/(.{255})/", "$1{SPLITHERE}")))) : record
-      ], null)
+      records = try(local.failover_records_transposed[product[1]].records, null)
 
       alias = try(local.failover_records_transposed[product[1]].alias, {})
     }
@@ -77,6 +86,10 @@ locals {
 
   failover_records = local.skip_zone_creation ? local.failover_records_by_zone_id : local.failover_records_by_name
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the records
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "failover_record" {
   for_each = var.enable_module ? local.failover_records : {}

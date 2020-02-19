@@ -41,8 +41,8 @@ module "route53" {
   records = [
     {
       type    = "A"
-      ttl     = var.route53_record_ttl
-      records = var.route53_record_records
+      ttl     = var.record_ttl
+      records = var.record_records
     }
   ]
 }

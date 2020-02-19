@@ -1,65 +1,55 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CONFIGURE OUR AWS CONNECTION
+# CREATE A ROUTE53 ZONE WITH SUBDOMAINS AND CNAMES
+# This example creates a zone and records for the main domain and a subdomain.
+#   - (www.)acme.com
+#   - (www.)dev.acme.com
+#
+# The www. subdomains are implement through CNAMES and point on the A records.
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
   region = var.aws_region
 }
 
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the zone and its records
+# ---------------------------------------------------------------------------------------------------------------------
+
 module "route53" {
   source = "../.."
 
-  name                  = "mineiros.io"
-  create_google_mail_mx = true
-  create_google_spf     = true
-
-  # Create a range of G Suite service URLs
-  google_suite_services_custom_aliases = {
-    mail     = "mail",
-    calendar = "calendar",
-    drive    = "drive",
-    groups   = "groups"
-  }
-
-  google_mail_dkim = {
-    "google._domainkey" = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoeaZAFNfAvwiMkuIHimJVODdtPX+9d7uVhFrML2S8m0GNd0c9w8Os5nQBeQaBmm1h7S/yxYrc5lcV5eaF1TgBmg9fYrwKXG8u1+gotmhFHhWl/GebYiUa/PchLAG+rrSav7lDlB3uTcbMGZUPQ3uuQOEwqi7SRsAFilAYFIkK+N6Crpis9LABFVAkrWsEbxOpVArxAdRpe6UuYAnS/Ge1uGOKu3L1kK5AGVN2HIkQPEllAQ0KY2yiPGfQXw8SA5ibZ0FjKlnw4amocZyBSLBlpHo9/qzLAy9JoByTOoZXdijikPY7zioSGIfOaY0RqSIpR338VXhHS76QMrDG5fLwQIDAQAB"
-  }
+  name = var.zone_name
 
   records = [
     {
-      # We don't explicitly need to set a name if the record matches the zone
-      # name = "mineiros.io"
-      type = "A"
-      ttl  = 300
-      records = [
-        "172.217.16.206",
-        "172.217.18.163"
-      ]
+      # We don't explicitly need to set names for records that match the zone
+      type    = "A"
+      ttl     = var.primary_ttl
+      records = var.primary_targets
     },
     {
-      # This record doesn't have a explicitly TTL set. Therefore it will assume the default TTL that is configurable
-      # through var.default_ttl.
-      name = "testing.mineiros.io"
-      type = "A"
-      records = [
-        "172.217.16.209"
-      ]
-    },
-    {
-      name = "dev.mineiros.io"
-      type = "A"
-      ttl  = 300
-      records = [
-        "172.217.18.99",
-      ]
-    },
-    {
-      name = "development.mineiros.io"
       type = "CNAME"
-      ttl  = 5
+      name = "www"
       records = [
-        "dev.mineiros.io"
+        var.zone_name
       ]
-    }
+    },
+    {
+      name    = "dev"
+      type    = "A"
+      ttl     = var.dev_ttl
+      records = var.dev_targets
+    },
+    {
+      type = "CNAME"
+      name = "www.dev.${var.zone_name}"
+      records = [
+        "dev.${var.zone_name}"
+      ]
+    },
   ]
 }

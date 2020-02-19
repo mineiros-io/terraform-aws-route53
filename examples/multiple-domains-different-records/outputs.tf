@@ -1,11 +1,14 @@
 output "zones" {
-  value = module.zones
+  description = "All created zones."
+  value       = module.zones
 }
 
-output "mineiros-io" {
-  value = module.mineiros-io
+output "zone_a_records" {
+  description = "All records created in zone a."
+  value       = module.zone_a_records
 }
 
-output "mineiros-com" {
-  value = module.mineiros-com
+output "zone_b_records" {
+  description = "All records created in zone b."
+  value       = module.zone_b_records
 }

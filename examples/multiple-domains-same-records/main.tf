@@ -1,4 +1,10 @@
 # ---------------------------------------------------------------------------------------------------------------------
+# CREATE TWO ZONES WITH SAME RECORDS
+#
+# We create two zones and attach the same set of records to both. The zones will share the same delegation set.
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
 # CONFIGURE OUR AWS CONNECTION
 # ---------------------------------------------------------------------------------------------------------------------
 
@@ -9,31 +15,29 @@ provider "aws" {
 module "zones" {
   source = "../.."
 
-  name = ["mineiros.io", "mineiros.com"]
+  # Create two zones
+  name = [
+    var.zone_a,
+    var.zone_b
+  ]
+
+  # Attach the same records to both created zones
   records = [
     {
-      name = "testing"
-      type = "A"
-      ttl  = 3600
-      records = [
-        "172.217.16.209"
-      ]
+      type    = "A"
+      ttl     = var.primary_ttl
+      records = var.primary_targets
     },
     {
-      type = "A"
-      ttl  = 300
-      records = [
-        "172.217.16.206",
-        "172.217.18.163"
-      ]
+      type    = "TXT"
+      ttl     = 300
+      records = var.primary_txt_targets
     },
     {
-      type = "TXT"
-      ttl  = 300
-      records = [
-        "txt1",
-        "txt2"
-      ]
+      name    = "testing"
+      type    = "A"
+      ttl     = var.testing_ttl
+      records = var.testing_targets
     },
   ]
 }

@@ -1,18 +1,38 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# CREATE ROUTE53 ZONES AND RECORDS
+#
+# This module creates one or multiple Route53 zones with associated records and delegation set.
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Prepare locals to keep the code cleaner
+# ---------------------------------------------------------------------------------------------------------------------
+
 locals {
   skip_zone_creation = length(local.zones) == 0
   zones              = var.name == null ? [] : try(tolist(var.name), [tostring(var.name)], [])
-  delegation_set_id  = var.delegation_set_id != null ? var.delegation_set_id : try(aws_route53_delegation_set.delegation_set[0].id, null)
 
-  run_in_vpc = length(var.vpc_ids) > 0
+  delegation_set_id = var.delegation_set_id != null ? var.delegation_set_id : try(
+    aws_route53_delegation_set.delegation_set[0].id, null
+  )
 
+  run_in_vpc                   = length(var.vpc_ids) > 0
   skip_delegation_set_creation = ! var.enable_module || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create a delegation set to share the same nameservers among multiple zones
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_delegation_set" "delegation_set" {
   count = local.skip_delegation_set_creation ? 0 : 1
 
   reference_name = try(coalesce(var.reference_name, local.zones[0]), null)
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the zones
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_zone" "zone" {
   for_each = var.enable_module ? toset(local.zones) : []
@@ -35,6 +55,10 @@ resource "aws_route53_zone" "zone" {
     var.tags
   )
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Prepare the records
+# ---------------------------------------------------------------------------------------------------------------------
 
 locals {
   records_expanded = [
@@ -98,6 +122,10 @@ locals {
 
   records = local.skip_zone_creation ? local.records_by_zone_id : local.records_by_name
 }
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Attach the records to our created zone(s)
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "record" {
   for_each = var.enable_module ? local.records : {}
