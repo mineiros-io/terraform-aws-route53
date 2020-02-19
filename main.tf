@@ -10,7 +10,7 @@
 
 locals {
   skip_zone_creation = length(local.zones) == 0
-  zones              = try(tolist(var.name), [tostring(var.name)], [])
+  zones              = var.name == null ? [] : try(tolist(var.name), [tostring(var.name)], [])
 
   delegation_set_id = var.delegation_set_id != null ? var.delegation_set_id : try(
     aws_route53_delegation_set.delegation_set[0].id, null
@@ -73,7 +73,7 @@ locals {
 
       # We need to wrap the reference to aws_route53_zone inside a try to avoid exceptations that might occur when we
       # run terraform destroy without running a successful terraform apply before.
-      zone_id = try(aws_route53_zone.zone[product[0]].id, null)
+      zone_id = var.zone_id != null ? var.zone_id : aws_route53_zone.zone[product[0]].id
 
       name            = local.records[product[1]].name
       type            = local.records[product[1]].type
@@ -115,13 +115,13 @@ resource "aws_route53_record" "record" {
   records         = each.value.records
   health_check_id = each.value.health_check_id
 
-  //  dynamic "alias" {
-  //    for_each = each.value.alias == null ? [] : [each.value.alias]
-  //
-  //    content {
-  //      name                   = alias.value.name
-  //      zone_id                = alias.value.zone_id
-  //      evaluate_target_health = alias.value.evaluate_target_health
-  //    }
-  //  }
+  dynamic "alias" {
+    for_each = each.value.alias
+
+    content {
+      name                   = alias.value.name
+      zone_id                = alias.value.zone_id
+      evaluate_target_health = alias.value.evaluate_target_health
+    }
+  }
 }

@@ -29,7 +29,7 @@ module "zone_a_records" {
 
   # Wrap the reference to the zone inside a try statement to prevent ugly exceptions if we run terraform destroy
   # without running a successful terraform apply before.
-  zone_id = try(module.zones.zone[var.zone_a].zone_id, null)
+  zone_id = module.zones.zone[var.zone_a].zone_id
 
   records = [
     {
@@ -46,7 +46,7 @@ module "zone_a_records" {
 module "zone_b_records" {
   source = "../.."
 
-  zone_id = try(module.zones.zone[var.zone_b].zone_id, null)
+  zone_id = module.zones.zone[var.zone_b].zone_id
 
   records = [
     {
