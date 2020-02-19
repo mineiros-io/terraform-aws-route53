@@ -33,18 +33,6 @@ variable "comment" {
   default     = "Managed by Terraform"
 }
 
-variable "create_google_mail_mx" {
-  description = "Whether to create the standard set of Google Mail MX entries."
-  type        = bool
-  default     = false
-}
-
-variable "create_google_spf" {
-  description = "Whether to create a SPF entry for Google Suite. Please notice that the entry needs to valiadte in Google Suite. https://support.google.com/a/answer/33786?hl=en"
-  type        = bool
-  default     = false
-}
-
 variable "default_ttl" {
   description = "The default TTL ( Time to Live ) in seconds that will be used for all records that support the ttl parameter. Will be overwritten by the records ttl parameter if set."
   type        = number
@@ -67,41 +55,6 @@ variable "force_destroy" {
   description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
   type        = bool
   default     = false
-}
-
-variable "google_mail_mx_ttl" {
-  description = "The TTL (time to live) used for the created Google Mail MX entries."
-  type        = number
-  default     = 3600
-}
-
-variable "google_mail_dkim" {
-  description = "Define the DKIM record to enhance security for outgoing mails with in Google Suite. Notice that you need to verify the DKIM record. https://support.google.com/a/answer/174126?hl=en"
-  type        = map(string)
-
-  # Example:
-  #
-  # google_mail_dkim = {
-  #   "google._domainkey" = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoeaZAFNfAvwiMkuIHimJVODdtPX+9d7uVhFrML2S8m0GNd0c9w8Os5nQBeQaBmm1h7S/yxYrc5lcV5eaF1TgBmg9fYrwKXG8u1+gotmhFHhWl/GebYiUa/PchLAG+rrSav7lDlB3uTcbMGZUPQ3uuQOEwqi7SRsAFilAYFIkK+N6Crpis9LABFVAkrWsEbxOpVArxAdRpe6UuYAnS/Ge1uGOKu3L1kK5AGVN2HIkQPEllAQ0KY2yiPGfQXw8SA5ibZ0FjKlnw4amocZyBSLBlpHo9/qzLAy9JoByTOoZXdijikPY7zioSGIfOaY0RqSIpR338VXhHS76QMrDG5fLwQIDAQAB"
-  # }
-
-  default = {}
-}
-
-variable "google_suite_services_custom_aliases" {
-  description = "A map of customized Google Suote service URLs. The key is the service name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite. https://support.google.com/a/answer/53340?hl=en"
-  type        = map(string)
-
-  # Example:
-  #
-  # google_suite_services = {
-  #   mail     = "mail",
-  #   calendar = "calendar",
-  #   drive    = "drive",
-  #   groups   = "groups"
-  # }
-
-  default = {}
 }
 
 variable "records" {
