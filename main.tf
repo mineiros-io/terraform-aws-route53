@@ -26,7 +26,7 @@ locals {
 resource "aws_route53_delegation_set" "delegation_set" {
   count = local.skip_delegation_set_creation ? 0 : 1
 
-  reference_name = try(coalesce(var.reference_name, local.zones[0]), null)
+  reference_name = var.reference_name
 }
 
 # ---------------------------------------------------------------------------------------------------------------------

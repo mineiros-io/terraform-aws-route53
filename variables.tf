@@ -131,7 +131,7 @@ variable "failover_records" {
 variable "reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
-  default     = ""
+  default     = null
 }
 
 variable "skip_delegation_set_creation" {
