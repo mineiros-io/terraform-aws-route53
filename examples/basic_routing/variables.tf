@@ -22,6 +22,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "bucket_name" {
+  description = "The name of the bucket that will act as a website."
+  type        = string
+  default     = "mineiros-test-website"
+}
+
 variable "dev_ttl" {
   description = "The TTL ( Time to Live ) for the dev. A record."
   type        = number
@@ -33,21 +39,6 @@ variable "dev_targets" {
   type        = set(string)
   default = [
     "172.217.16.111",
-  ]
-}
-
-variable "primary_ttl" {
-  description = "The TTL ( Time to Live ) for the primary A record."
-  type        = number
-  default     = 1800
-}
-
-variable "primary_targets" {
-  description = "The records for the primary A record."
-  type        = set(string)
-  default = [
-    "172.217.16.206",
-    "172.217.18.163"
   ]
 }
 
