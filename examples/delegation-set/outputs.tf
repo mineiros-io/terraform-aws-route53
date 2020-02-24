@@ -1,11 +1,9 @@
-output "mineiros-io" {
-  value = module.mineiros-io
+output "zone-with-delegated-set" {
+  description = "The outputs of the primary zone with which we create the delegated set."
+  value       = module.route53-zone-with-delegation-set
 }
 
-output "mineiros-com" {
-  value = module.mineiros-com
-}
-
-output "mineiros-de" {
-  value = module.mineiros-de
+output "secondary-zone" {
+  description = "The outputs of the secondary zone."
+  value       = module.route53-zone
 }

@@ -22,14 +22,28 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "record_ttl" {
-  description = "The TTL of the record."
+variable "dev_ttl" {
+  description = "The TTL ( Time to Live ) for the dev. A record."
   type        = number
-  default     = 3600
+  default     = 1800
 }
 
-variable "record_records" {
-  description = "The records for the A record."
+variable "dev_targets" {
+  description = "The records for the dev. A record."
+  type        = set(string)
+  default = [
+    "172.217.16.111",
+  ]
+}
+
+variable "primary_ttl" {
+  description = "The TTL ( Time to Live ) for the primary A record."
+  type        = number
+  default     = 1800
+}
+
+variable "primary_targets" {
+  description = "The records for the primary A record."
   type        = set(string)
   default = [
     "172.217.16.206",

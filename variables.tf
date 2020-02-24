@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
-# Define these secrets as environment variables
+# Define these secrets as environment variables.
 # ---------------------------------------------------------------------------------------------------------------------
 
 # AWS_ACCESS_KEY_ID
@@ -12,9 +12,14 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "This is the name of the hosted zone."
+  description = "The name of the hosted zone. To create multiple zones at once, pass a list of names [\"zone1\", \"zone2\"]."
   type        = any
-  default     = null
+
+  # Examples:
+  #
+  # Single:   name = "example.com"
+  # Multiple: name = ["example.com", "example.io"]
+  default = null
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -26,18 +31,6 @@ variable "comment" {
   description = "A comment for the hosted zone."
   type        = string
   default     = "Managed by Terraform"
-}
-
-variable "create_google_mail_mx" {
-  description = "Whether to create the standard set of Google Mail MX entries."
-  type        = bool
-  default     = false
-}
-
-variable "create_google_spf" {
-  description = "Whether to create a SPF entry for Google Suite. Please notice that the entry needs to valiadte in Google Suite. https://support.google.com/a/answer/33786?hl=en"
-  type        = bool
-  default     = false
 }
 
 variable "default_ttl" {
@@ -62,41 +55,6 @@ variable "force_destroy" {
   description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
   type        = bool
   default     = false
-}
-
-variable "google_mail_mx_ttl" {
-  description = "The TTL (time to live) used for the created Google Mail MX entries."
-  type        = number
-  default     = 3600
-}
-
-variable "google_mail_dkim" {
-  description = "Define the DKIM record to enhance security for outgoing mails with in Google Suite. Notice that you need to verify the DKIM record. https://support.google.com/a/answer/174126?hl=en"
-  type        = map(string)
-
-  # Example:
-  #
-  # google_mail_dkim = {
-  #   "google._domainkey" = "v=DKIM1; k=rsa; p=MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAoeaZAFNfAvwiMkuIHimJVODdtPX+9d7uVhFrML2S8m0GNd0c9w8Os5nQBeQaBmm1h7S/yxYrc5lcV5eaF1TgBmg9fYrwKXG8u1+gotmhFHhWl/GebYiUa/PchLAG+rrSav7lDlB3uTcbMGZUPQ3uuQOEwqi7SRsAFilAYFIkK+N6Crpis9LABFVAkrWsEbxOpVArxAdRpe6UuYAnS/Ge1uGOKu3L1kK5AGVN2HIkQPEllAQ0KY2yiPGfQXw8SA5ibZ0FjKlnw4amocZyBSLBlpHo9/qzLAy9JoByTOoZXdijikPY7zioSGIfOaY0RqSIpR338VXhHS76QMrDG5fLwQIDAQAB"
-  # }
-
-  default = {}
-}
-
-variable "google_suite_services_custom_aliases" {
-  description = "A map of customized Google Suote service URLs. The key is the service name and the value is the desired custom subdomain. Please notice, that it takes additional steps to enable customized services URLs in Google Suite. https://support.google.com/a/answer/53340?hl=en"
-  type        = map(string)
-
-  # Example:
-  #
-  # google_suite_services = {
-  #   mail     = "mail",
-  #   calendar = "calendar",
-  #   drive    = "drive",
-  #   groups   = "groups"
-  # }
-
-  default = {}
 }
 
 variable "records" {
@@ -145,6 +103,31 @@ variable "records" {
   default = []
 }
 
+variable "failover_records" {
+  description = "A list of failover records to create in the Hosted Zone."
+  type        = any
+
+  # Example:
+  #
+  # failover_records = [
+  #     {
+  #       type            = "A"
+  #       set_identifier  = "prod"
+  #       failover        = "PRIMARY"
+  #       health_check_id = "A24GBC23AFGH"
+  #       records         = ["172.217.22.99"]
+  #     },
+  #     {
+  #       type            = "A"
+  #       set_identifier  = "prod"
+  #       failover        = "SECONDARY"
+  #       records         = ["172.217.22.100"]
+  #     }
+  # ]
+
+  default = []
+}
+
 variable "reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
@@ -180,6 +163,34 @@ variable "vpc_ids" {
   # vpc_ids = [
   #   "vpc-56a5ec2c",
   #   "vpc-23a7efga"
+  # ]
+
+  default = []
+}
+
+variable "weighted_records" {
+  description = "A list of weighted records to create in the Hosted Zone."
+  type        = any
+
+  # Example:
+  #
+  # weighted_records = [
+  #   {
+  #     type           = "A"
+  #     weight         = 90
+  #     set_identifier = "prod"
+  #     records = [
+  #       "216.239.32.117"
+  #     ]
+  #   },
+  #   {
+  #     type           = "A"
+  #     weight         = 10
+  #     set_identifier = "preview"
+  #     records = [
+  #       "216.239.32.118"
+  #     ]
+  #   }
   # ]
 
   default = []

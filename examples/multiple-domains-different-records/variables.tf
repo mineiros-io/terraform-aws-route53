@@ -1,6 +1,6 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # ENVIRONMENT VARIABLES
-# Define these secrets as environment variables
+# Define these secrets as environment variables.
 # ---------------------------------------------------------------------------------------------------------------------
 
 # AWS_ACCESS_KEY_ID
@@ -17,7 +17,19 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "aws_region" {
-  description = "The AWS region in which all resources will be created"
+  description = "The AWS region in which all resources will be created."
   type        = string
   default     = "us-east-1"
+}
+
+variable "zone_a" {
+  description = "The name of the first zone to create."
+  type        = string
+  default     = "mineiros.io"
+}
+
+variable "zone_b" {
+  description = "The name of the second zone to create."
+  type        = string
+  default     = "mineiros.com"
 }

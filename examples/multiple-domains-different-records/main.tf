@@ -1,59 +1,61 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CONFIGURE OUR AWS CONNECTION
+# CREATE TWO ZONES WITH DIFFERENT RECORDS
+#
+# We create two zones and different records using the convinient name = [] shortcut.
+# All created zones will share the same delegation set.
+# ---------------------------------------------------------------------------------------------------------------------
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  # The AWS region in which all resources will be created
   region = var.aws_region
 }
 
+# Create multiple zones with a single module
 module "zones" {
   source = "../.."
 
-  name = ["mineiros.io", "mineiros.com"]
-}
-
-module "mineiros-io" {
-  source = "../.."
-
-  zone_id = module.zones.zone["mineiros.io"].zone_id
-
-  records = [
-    {
-      name = ""
-      type = "A"
-      ttl  = 300
-      records = [
-        "10.0.0.1",
-        "10.0.0.2",
-      ]
-    },
-    {
-      name = ""
-      type = "TXT"
-      ttl  = 300
-      records = [
-        "txt1",
-        "txt2"
-      ]
-    },
+  name = [
+    var.zone_a,
+    var.zone_b
   ]
 }
 
-module "mineiros-com" {
+# Create the records for zone a
+module "zone_a_records" {
   source = "../.."
 
-  zone_id = module.zones.zone["mineiros.com"].zone_id
+  # Wrap the reference to the zone inside a try statement to prevent ugly exceptions if we run terraform destroy
+  # without running a successful terraform apply before.
+  zone_id = try(module.zones.zone[var.zone_a].zone_id, null)
 
   records = [
     {
-      name = ""
-      type = "A"
+      type = "TXT"
       ttl  = 300
       records = [
-        "10.0.0.3",
-        "10.0.0.4",
+        "Lorem ipsum"
       ]
-    },
+    }
+  ]
+}
+
+# Create the records for zone b
+module "zone_b_records" {
+  source = "../.."
+
+  zone_id = try(module.zones.zone[var.zone_b].zone_id, null)
+
+  records = [
+    {
+      type = "TXT"
+      ttl  = 600
+      records = [
+        "Lorem ipsum",
+        "Lorem ipsum dolor sit amet"
+      ]
+    }
   ]
 }
