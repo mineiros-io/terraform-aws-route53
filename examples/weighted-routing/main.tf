@@ -30,7 +30,7 @@ module "route53" {
   skip_delegation_set_creation = var.skip_delegation_set_creation
 
   # We send 90% of our traffic to the prod system and 10% of our traffic to the preview system
-  weighted_records = [
+  records = [
     {
       type           = "A"
       set_identifier = "prod"
@@ -42,10 +42,7 @@ module "route53" {
       set_identifier = "preview"
       weight         = 10
       records        = var.preview_targets
-    }
-  ]
-
-  records = [
+    },
     {
       type    = "A"
       name    = "dev"

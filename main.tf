@@ -61,7 +61,7 @@ resource "aws_route53_zone" "zone" {
 
 locals {
   records_expanded = {
-    for record in var.records : join("-", compact([lower(record.type), try(lower(record.name), ""), ])) => {
+    for record in var.records : join("-", compact([lower(record.type), try(lower(record.set_identifier), ""), try(lower(record.name), ""), ])) => {
       type            = record.type
       name            = try(record.name, "")
       ttl             = try(record.ttl, null)
@@ -69,6 +69,8 @@ locals {
       allow_overwrite = try(record.allow_overwrite, null)
       health_check_id = try(record.health_check_id, null)
       records         = try(record.records, null)
+      set_identifier  = try(record.set_identifier, null)
+      weight          = try(record.weight, null)
     }
   }
 
@@ -82,6 +84,8 @@ locals {
       allow_overwrite = local.records_expanded[product[1]].allow_overwrite
       health_check_id = local.records_expanded[product[1]].health_check_id
       records         = local.records_expanded[product[1]].records
+      set_identifier  = local.records_expanded[product[1]].set_identifier
+      weight          = local.records_expanded[product[1]].weight
     }
   }
 
@@ -95,6 +99,8 @@ locals {
       allow_overwrite = record.allow_overwrite
       health_check_id = record.health_check_id
       records         = record.records
+      set_identifier  = record.set_identifier
+      weight          = record.weight
     }
   }
 
@@ -113,6 +119,7 @@ resource "aws_route53_record" "record" {
   name            = each.value.name
   allow_overwrite = each.value.allow_overwrite
   health_check_id = each.value.health_check_id
+  set_identifier  = each.value.set_identifier
 
   # only set default TTL when not set and not alias record
   ttl = each.value.ttl == null && each.value.alias == null ? var.default_ttl : null
@@ -122,6 +129,15 @@ resource "aws_route53_record" "record" {
     each.value.type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
     join("\"\"", compact(split("{SPLITHERE}", replace(r, "/(.{255})/", "$1{SPLITHERE}")))) : r
   ] : null
+
+  dynamic "weighted_routing_policy" {
+    for_each = each.value.weight == null ? [] : [each.value.weight]
+
+    content {
+      weight = weighted_routing_policy.value
+    }
+  }
+
 
   dynamic "alias" {
     for_each = each.value.alias == null ? [] : [each.value.alias]
