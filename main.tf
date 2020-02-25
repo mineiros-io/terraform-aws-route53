@@ -61,7 +61,12 @@ resource "aws_route53_zone" "zone" {
 
 locals {
   records_expanded = {
-    for record in var.records : join("-", compact([lower(record.type), try(lower(record.set_identifier), ""), try(lower(record.name), ""), ])) => {
+    for record in var.records : join("-", compact([
+      lower(record.type),
+      try(lower(record.set_identifier), ""),
+      try(lower(record.failover), ""),
+      try(lower(record.name), ""),
+      ])) => {
       type            = record.type
       name            = try(record.name, "")
       ttl             = try(record.ttl, null)
@@ -71,6 +76,7 @@ locals {
       records         = try(record.records, null)
       set_identifier  = try(record.set_identifier, null)
       weight          = try(record.weight, null)
+      failover        = try(record.failover, null)
     }
   }
 
@@ -86,6 +92,7 @@ locals {
       records         = local.records_expanded[product[1]].records
       set_identifier  = local.records_expanded[product[1]].set_identifier
       weight          = local.records_expanded[product[1]].weight
+      failover        = local.records_expanded[product[1]].failover
     }
   }
 
@@ -101,6 +108,7 @@ locals {
       records         = record.records
       set_identifier  = record.set_identifier
       weight          = record.weight
+      failover        = record.failover
     }
   }
 
@@ -138,6 +146,13 @@ resource "aws_route53_record" "record" {
     }
   }
 
+  dynamic "failover_routing_policy" {
+    for_each = each.value.failover == null ? [] : [each.value.failover]
+
+    content {
+      type = failover_routing_policy.value
+    }
+  }
 
   dynamic "alias" {
     for_each = each.value.alias == null ? [] : [each.value.alias]
