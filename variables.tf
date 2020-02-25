@@ -199,7 +199,7 @@ variable "weighted_records" {
 variable "zone_id" {
   description = "a zone ID to create the records in"
   type        = string
-  default     = ""
+  default     = null
 
   # Example:
   #
