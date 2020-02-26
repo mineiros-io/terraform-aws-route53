@@ -44,17 +44,18 @@ module "route53" {
   records = [
     {
       type           = "A"
-      set_identifier = "prod"
+      set_identifier = "primary"
       failover       = "PRIMARY"
       # Non-alias primary records must have an associated health check
       health_check_id = aws_route53_health_check.primary.id
       records         = var.primary_record_records
     },
     {
-      type           = "A"
-      set_identifier = "prod"
-      failover       = "SECONDARY"
-      records        = var.secondary_record_records
+      type            = "A"
+      set_identifier  = "failover"
+      failover        = "SECONDARY"
+      health_check_id = null
+      records         = var.secondary_record_records
     }
   ]
 }
