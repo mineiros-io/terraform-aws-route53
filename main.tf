@@ -61,54 +61,25 @@ resource "aws_route53_zone" "zone" {
 
 locals {
   records_expanded = {
-    for record in var.records : join("-", compact([
+    for i, record in var.records : join("-", compact([
       lower(record.type),
       try(lower(record.set_identifier), ""),
       try(lower(record.failover), ""),
       try(lower(record.name), ""),
-      ])) => {
-      type            = record.type
-      name            = try(record.name, "")
-      ttl             = try(record.ttl, null)
-      alias           = try(record.alias, null)
-      allow_overwrite = try(record.allow_overwrite, var.allow_overwrite)
-      health_check_id = try(record.health_check_id, null)
-      records         = try(record.records, null)
-      set_identifier  = try(record.set_identifier, null)
-      weight          = try(record.weight, null)
-      failover        = try(record.failover, null)
-    }
+    ])) => i
   }
 
   records_by_name = {
     for product in setproduct(local.zones, keys(local.records_expanded)) : "${product[1]}-${product[0]}" => {
-      zone_id         = try(aws_route53_zone.zone[product[0]].id, null)
-      type            = local.records_expanded[product[1]].type
-      name            = local.records_expanded[product[1]].name
-      ttl             = local.records_expanded[product[1]].ttl
-      alias           = local.records_expanded[product[1]].alias
-      allow_overwrite = local.records_expanded[product[1]].allow_overwrite
-      health_check_id = local.records_expanded[product[1]].health_check_id
-      records         = local.records_expanded[product[1]].records
-      set_identifier  = local.records_expanded[product[1]].set_identifier
-      weight          = local.records_expanded[product[1]].weight
-      failover        = local.records_expanded[product[1]].failover
+      zone_id = try(aws_route53_zone.zone[product[0]].id, null)
+      idx     = local.records_expanded[product[1]]
     }
   }
 
   records_by_zone_id = {
-    for id, record in local.records_expanded : id => {
-      zone_id         = var.zone_id
-      type            = record.type
-      name            = record.name
-      ttl             = record.ttl
-      alias           = record.alias
-      allow_overwrite = record.allow_overwrite
-      health_check_id = record.health_check_id
-      records         = record.records
-      set_identifier  = record.set_identifier
-      weight          = record.weight
-      failover        = record.failover
+    for id, idx in local.records_expanded : id => {
+      zone_id = var.zone_id
+      idx     = idx
     }
   }
 
@@ -123,23 +94,23 @@ resource "aws_route53_record" "record" {
   for_each = var.enable_module ? local.records : {}
 
   zone_id         = each.value.zone_id
-  type            = each.value.type
-  name            = each.value.name
-  allow_overwrite = each.value.allow_overwrite
-  health_check_id = each.value.health_check_id
-  set_identifier  = each.value.set_identifier
+  type            = var.records[each.value.idx].type
+  name            = try(var.records[each.value.idx].name, "")
+  allow_overwrite = try(var.records[each.value.idx].allow_overwrite, var.allow_overwrite)
+  health_check_id = try(var.records[each.value.idx].health_check_id, null)
+  set_identifier  = try(var.records[each.value.idx].set_identifier, null)
 
   # only set default TTL when not set and not alias record
-  ttl = each.value.ttl == null && each.value.alias == null ? var.default_ttl : each.value.ttl
+  ttl = ! can(var.records[each.value.idx].ttl) && ! can(var.records[each.value.idx].alias) ? var.default_ttl : try(var.records[each.value.idx].ttl, null)
 
   # split TXT records at 255 chars to support >255 char records
-  records = each.value.records != null ? [for r in each.value.records :
-    each.value.type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
+  records = can(var.records[each.value.idx].records) ? [for r in var.records[each.value.idx].records :
+    var.records[each.value.idx].type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
     join("\"\"", compact(split("{SPLITHERE}", replace(r, "/(.{255})/", "$1{SPLITHERE}")))) : r
   ] : null
 
   dynamic "weighted_routing_policy" {
-    for_each = each.value.weight == null ? [] : [each.value.weight]
+    for_each = try([var.records[each.value.idx].weight], [])
 
     content {
       weight = weighted_routing_policy.value
@@ -147,7 +118,7 @@ resource "aws_route53_record" "record" {
   }
 
   dynamic "failover_routing_policy" {
-    for_each = each.value.failover == null ? [] : [each.value.failover]
+    for_each = try([var.records[each.value.idx].failover], [])
 
     content {
       type = failover_routing_policy.value
@@ -155,7 +126,7 @@ resource "aws_route53_record" "record" {
   }
 
   dynamic "alias" {
-    for_each = each.value.alias == null ? [] : [each.value.alias]
+    for_each = try([var.records[each.value.idx].alias], [])
 
     content {
       name                   = alias.value.name
