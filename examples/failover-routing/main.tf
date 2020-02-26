@@ -41,7 +41,7 @@ module "route53" {
   name                         = var.zone_name
   skip_delegation_set_creation = var.skip_delegation_set_creation
 
-  failover_records = [
+  records = [
     {
       type           = "A"
       set_identifier = "prod"

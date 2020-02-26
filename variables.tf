@@ -27,6 +27,12 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "allow_overwrite" {
+  description = "Default allow_overwrite value valid for all record sets."
+  type        = bool
+  default     = false
+}
+
 variable "comment" {
   description = "A comment for the hosted zone."
   type        = string
@@ -103,31 +109,6 @@ variable "records" {
   default = []
 }
 
-variable "failover_records" {
-  description = "A list of failover records to create in the Hosted Zone."
-  type        = any
-
-  # Example:
-  #
-  # failover_records = [
-  #     {
-  #       type            = "A"
-  #       set_identifier  = "prod"
-  #       failover        = "PRIMARY"
-  #       health_check_id = "A24GBC23AFGH"
-  #       records         = ["172.217.22.99"]
-  #     },
-  #     {
-  #       type            = "A"
-  #       set_identifier  = "prod"
-  #       failover        = "SECONDARY"
-  #       records         = ["172.217.22.100"]
-  #     }
-  # ]
-
-  default = []
-}
-
 variable "reference_name" {
   description = "The reference name used in Caller Reference (helpful for identifying single delegation set amongst others)."
   type        = string
@@ -168,38 +149,10 @@ variable "vpc_ids" {
   default = []
 }
 
-variable "weighted_records" {
-  description = "A list of weighted records to create in the Hosted Zone."
-  type        = any
-
-  # Example:
-  #
-  # weighted_records = [
-  #   {
-  #     type           = "A"
-  #     weight         = 90
-  #     set_identifier = "prod"
-  #     records = [
-  #       "216.239.32.117"
-  #     ]
-  #   },
-  #   {
-  #     type           = "A"
-  #     weight         = 10
-  #     set_identifier = "preview"
-  #     records = [
-  #       "216.239.32.118"
-  #     ]
-  #   }
-  # ]
-
-  default = []
-}
-
 variable "zone_id" {
   description = "a zone ID to create the records in"
   type        = string
-  default     = ""
+  default     = null
 
   # Example:
   #
