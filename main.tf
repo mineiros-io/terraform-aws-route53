@@ -71,7 +71,7 @@ locals {
       name            = try(record.name, "")
       ttl             = try(record.ttl, null)
       alias           = try(record.alias, null)
-      allow_overwrite = try(record.allow_overwrite, null)
+      allow_overwrite = try(record.allow_overwrite, var.allow_overwrite)
       health_check_id = try(record.health_check_id, null)
       records         = try(record.records, null)
       set_identifier  = try(record.set_identifier, null)

@@ -27,6 +27,12 @@ variable "name" {
 # These variables have defaults, but may be overridden.
 # ---------------------------------------------------------------------------------------------------------------------
 
+variable "allow_overwrite" {
+  description = "Default allow_overwrite value valid for all record sets."
+  type        = bool
+  default     = false
+}
+
 variable "comment" {
   description = "A comment for the hosted zone."
   type        = string
