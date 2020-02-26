@@ -33,11 +33,10 @@ resource "aws_s3_bucket_object" "object" {
   bucket = aws_s3_bucket.website.bucket
   key    = "index.html"
   source = "index.html"
-  etag   = filemd5("index.html")
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Create the zone and its records
+# Create the zone and a mixed set of records
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53" {

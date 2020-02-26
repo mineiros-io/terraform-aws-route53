@@ -1,17 +1,26 @@
 package test
 
 import (
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestDelegationSet(t *testing.T) {
 	t.Parallel()
 
+	expectedMainZoneName := getUniqueTestZoneName()
+	expectedSecondaryZoneName := getUniqueTestZoneName()
+
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
 		TerraformDir: "../examples/delegation-set",
 		Upgrade:      true,
+		// Variables to pass to our Terraform module using -var options
+		Vars: map[string]interface{}{
+			"main_zone_name":      expectedMainZoneName,
+			"secondary_zone_name": expectedSecondaryZoneName,
+		},
 	}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created
