@@ -1,17 +1,25 @@
 package test
 
 import (
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestMultipleDomainsSameRecords(t *testing.T) {
 	t.Parallel()
 
+	expectedZoneAName := getUniqueTestZoneName()
+	expectedZoneBName := getUniqueTestZoneName()
+
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
 		TerraformDir: "../examples/multiple-domains-same-records",
 		Upgrade:      true,
+		Vars: map[string]interface{}{
+			"zone_a": expectedZoneAName,
+			"zone_b": expectedZoneBName,
+		},
 	}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created

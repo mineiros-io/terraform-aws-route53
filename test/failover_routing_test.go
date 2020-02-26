@@ -1,17 +1,23 @@
 package test
 
 import (
-	"github.com/gruntwork-io/terratest/modules/terraform"
 	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestFailoverRouting(t *testing.T) {
 	t.Parallel()
 
+	expectedZoneName := getUniqueTestZoneName()
+
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
 		TerraformDir: "../examples/failover-routing",
 		Upgrade:      true,
+		Vars: map[string]interface{}{
+			"zone_name": expectedZoneName,
+		},
 	}
 
 	// At the end of the test, run `terraform destroy` to clean up any resources that were created

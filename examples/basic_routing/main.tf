@@ -16,7 +16,29 @@ provider "aws" {
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Create the zone and its records
+# Create a public s3 bucket that will act as a website
+# ---------------------------------------------------------------------------------------------------------------------
+
+resource "aws_s3_bucket" "website" {
+  bucket         = var.bucket_name
+  acl            = "public-read"
+  region         = var.aws_region
+  hosted_zone_id = module.route53.zone[var.zone_name].zone_id
+
+  website {
+    index_document = "index.html"
+    error_document = "error.html"
+  }
+}
+
+resource "aws_s3_bucket_object" "object" {
+  bucket = aws_s3_bucket.website.bucket
+  key    = "index.html"
+  source = "index.html"
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
+# Create the zone and a mixed set of records
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53" {
@@ -27,9 +49,12 @@ module "route53" {
   records = [
     {
       # We don't explicitly need to set names for records that match the zone
-      type    = "A"
-      ttl     = var.primary_ttl
-      records = var.primary_targets
+      type = "A"
+      alias = {
+        name                   = aws_s3_bucket.website.website_endpoint
+        zone_id                = aws_s3_bucket.website.hosted_zone_id
+        evaluate_target_health = true
+      }
     },
     {
       type = "CNAME"

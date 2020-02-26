@@ -2,12 +2,13 @@ package test
 
 import (
 	"fmt"
+	"strings"
+	"testing"
+
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"strings"
-	"testing"
 )
 
 func TestBasicRouting(t *testing.T) {
@@ -35,7 +36,7 @@ func TestBasicRouting(t *testing.T) {
 	terraform.InitAndApply(t, terraformOptions)
 
 	// Retrieve the zone_name from the outputs
-	zoneName := terraform.Output(t, terraformOptions,"zone_name")
+	zoneName := terraform.Output(t, terraformOptions, "zone_name")
 
 	// Validate if the name of the created zone matches the name that we defined in zone_name
 	assert.Equal(t, expectedZoneName+".", zoneName)
