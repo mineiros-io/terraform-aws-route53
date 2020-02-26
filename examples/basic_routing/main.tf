@@ -20,8 +20,10 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket" "website" {
-  bucket = var.bucket_name
-  acl    = "public-read"
+  bucket         = var.bucket_name
+  acl            = "public-read"
+  region         = var.aws_region
+  hosted_zone_id = module.route53.zone[var.zone_name].zone_id
 
   website {
     index_document = "index.html"
@@ -49,7 +51,7 @@ module "route53" {
       # We don't explicitly need to set names for records that match the zone
       type = "A"
       alias = {
-        name                   = aws_s3_bucket.website.bucket
+        name                   = aws_s3_bucket.website.website_endpoint
         zone_id                = aws_s3_bucket.website.hosted_zone_id
         evaluate_target_health = true
       }

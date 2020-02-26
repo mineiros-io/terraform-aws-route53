@@ -70,11 +70,11 @@ locals {
       type = record.type
       name = try(record.name, "")
       ttl  = try(record.ttl, null)
-      alias = try(record.alias, {
-        name                   = null
-        zone_id                = null
-        evaluate_target_health = null
-      })
+      alias = {
+        name                   = try(record.alias.name, null)
+        zone_id                = try(record.alias.zone_id, null)
+        evaluate_target_health = try(record.alias.evaluate_target_health, null)
+      }
       allow_overwrite = try(record.allow_overwrite, var.allow_overwrite)
       health_check_id = try(record.health_check_id, null)
       idx             = i
