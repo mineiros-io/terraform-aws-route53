@@ -130,7 +130,7 @@ resource "aws_route53_record" "record" {
   set_identifier  = each.value.set_identifier
 
   # only set default TTL when not set and not alias record
-  ttl = each.value.ttl == null && each.value.alias == null ? var.default_ttl : null
+  ttl = each.value.ttl == null && each.value.alias == null ? var.default_ttl : each.value.ttl
 
   # split TXT records at 255 chars to support >255 char records
   records = each.value.records != null ? [for r in each.value.records :
