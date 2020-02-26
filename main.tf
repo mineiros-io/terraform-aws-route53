@@ -61,19 +61,23 @@ resource "aws_route53_zone" "zone" {
 
 locals {
   records_expanded = {
-    for record in var.records : join("-", compact([
+    for i, record in var.records : join("-", compact([
       lower(record.type),
       try(lower(record.set_identifier), ""),
       try(lower(record.failover), ""),
       try(lower(record.name), ""),
       ])) => {
-      type            = record.type
-      name            = try(record.name, "")
-      ttl             = try(record.ttl, null)
-      alias           = try(record.alias, null)
+      type = record.type
+      name = try(record.name, "")
+      ttl  = try(record.ttl, null)
+      alias = try(record.alias, {
+        name                   = null
+        zone_id                = null
+        evaluate_target_health = null
+      })
       allow_overwrite = try(record.allow_overwrite, var.allow_overwrite)
       health_check_id = try(record.health_check_id, null)
-      records         = try(record.records, null)
+      idx             = i
       set_identifier  = try(record.set_identifier, null)
       weight          = try(record.weight, null)
       failover        = try(record.failover, null)
@@ -89,7 +93,7 @@ locals {
       alias           = local.records_expanded[product[1]].alias
       allow_overwrite = local.records_expanded[product[1]].allow_overwrite
       health_check_id = local.records_expanded[product[1]].health_check_id
-      records         = local.records_expanded[product[1]].records
+      idx             = local.records_expanded[product[1]].idx
       set_identifier  = local.records_expanded[product[1]].set_identifier
       weight          = local.records_expanded[product[1]].weight
       failover        = local.records_expanded[product[1]].failover
@@ -105,7 +109,7 @@ locals {
       alias           = record.alias
       allow_overwrite = record.allow_overwrite
       health_check_id = record.health_check_id
-      records         = record.records
+      idx             = record.idx
       set_identifier  = record.set_identifier
       weight          = record.weight
       failover        = record.failover
@@ -130,10 +134,10 @@ resource "aws_route53_record" "record" {
   set_identifier  = each.value.set_identifier
 
   # only set default TTL when not set and not alias record
-  ttl = each.value.ttl == null && each.value.alias == null ? var.default_ttl : each.value.ttl
+  ttl = each.value.ttl == null && each.value.alias.name == null ? var.default_ttl : each.value.ttl
 
   # split TXT records at 255 chars to support >255 char records
-  records = each.value.records != null ? [for r in each.value.records :
+  records = can(var.records[each.value.idx].records) ? [for r in var.records[each.value.idx].records :
     each.value.type == "TXT" && length(regexall("(\\\"\\\")", r)) == 0 ?
     join("\"\"", compact(split("{SPLITHERE}", replace(r, "/(.{255})/", "$1{SPLITHERE}")))) : r
   ] : null
@@ -155,7 +159,7 @@ resource "aws_route53_record" "record" {
   }
 
   dynamic "alias" {
-    for_each = each.value.alias == null ? [] : [each.value.alias]
+    for_each = each.value.alias.name == null ? [] : [each.value.alias]
 
     content {
       name                   = alias.value.name
