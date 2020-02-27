@@ -60,14 +60,12 @@ resource "aws_s3_bucket_object" "index" {
   bucket = aws_s3_bucket.website.bucket
   key    = "index.html"
   source = "index.html"
-  etag   = filemd5("index.html")
 }
 
 resource "aws_s3_bucket_object" "error" {
   bucket = aws_s3_bucket.website.bucket
   key    = "error.html"
   source = "error.html"
-  etag   = filemd5("error.html")
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
