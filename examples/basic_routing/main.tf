@@ -29,12 +29,43 @@ resource "aws_s3_bucket" "website" {
     index_document = "index.html"
     error_document = "error.html"
   }
+
+  cors_rule {
+    allowed_headers = ["*"]
+    allowed_methods = ["PUT", "POST"]
+    allowed_origins = ["*"]
+    expose_headers  = ["ETag"]
+    max_age_seconds = 3000
+  }
+  policy = <<-EOF
+  {
+    "Version": "2008-10-17",
+    "Statement": [
+      {
+        "Sid": "PublicReadForGetBucketObjects",
+        "Effect": "Allow",
+        "Principal": {
+          "AWS": "*"
+        },
+        "Action": "s3:GetObject",
+        "Resource": "arn:aws:s3:::${var.bucket_name}/*"
+      }
+    ]
+  }
+  EOF
+
 }
 
-resource "aws_s3_bucket_object" "object" {
+resource "aws_s3_bucket_object" "index" {
   bucket = aws_s3_bucket.website.bucket
   key    = "index.html"
   source = "index.html"
+}
+
+resource "aws_s3_bucket_object" "error" {
+  bucket = aws_s3_bucket.website.bucket
+  key    = "error.html"
+  source = "error.html"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
