@@ -8,12 +8,12 @@
 
 # terraform-aws-route53
 A [Terraform](https://www.terraform.io) 0.12 module to create a scalable and highly available
-[Amazon Route53](https://aws.amazon.com/service/route53) Domain Name System (DNS) on 
+[Amazon Route53](https://aws.amazon.com/service/route53) Domain Name System (DNS) on
 [Amazon Web Services (AWS)](https://aws.amazon.com/).
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
-- [Examples Started](#examples)
+- [Examples](#examples)
 - [Makefile](#makefile)
 - [Module Versioning](#module-versioning)
 - [About Mineiros](#about-mineiros)
@@ -51,7 +51,8 @@ This module offers a convenient way to create Route53 zones and records.
   are being created, all created zones will share the same delegation set.
 
 ## Getting Started
-Most basic usage creating a Route53 zone and delegation set.
+Most basic usage creating a Route53 zone and delegation set and
+a record for `www` pointing to localhost.
 
 ```hcl
 module "repository" {
@@ -59,6 +60,14 @@ module "repository" {
   version = "0.1.0"
 
   name = "mineiros.io"
+
+  records = [
+    {
+      name    = "www"
+      type    = "A"
+      records = ["127.0.0.1"]
+    },
+  ]
 }
 ```
 
@@ -87,7 +96,7 @@ Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following co
 3) Use the `PATCH` version when introducing backwards compatible bug fixes.
 
 ### Backwards compatibility in `0.0.z` and `0.y.z` version
-- In the context of initial development, backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is 
+- In the context of initial development, backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is
   increased. (Initial development)
 - In the context of pre-release, backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is
 increased. (Pre-release)
