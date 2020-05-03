@@ -57,7 +57,7 @@ a record for `www` pointing to localhost.
 ```hcl
 module "repository" {
   source  = "mineiros-io/route53/aws"
-  version = "0.1.0"
+  version = "0.2.0"
 
   name = "mineiros.io"
 

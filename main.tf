@@ -12,7 +12,7 @@ locals {
   zones                        = var.name == null ? [] : try(tolist(var.name), [tostring(var.name)], [])
   skip_zone_creation           = length(local.zones) == 0
   run_in_vpc                   = length(var.vpc_ids) > 0
-  skip_delegation_set_creation = ! var.enable_module || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
+  skip_delegation_set_creation = ! var.module_enabled || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
 
   delegation_set_id = var.delegation_set_id != null ? var.delegation_set_id : try(
     aws_route53_delegation_set.delegation_set[0].id, null
@@ -27,6 +27,8 @@ resource "aws_route53_delegation_set" "delegation_set" {
   count = local.skip_delegation_set_creation ? 0 : 1
 
   reference_name = var.reference_name
+
+  depends_on = [var.module_depends_on]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -34,7 +36,7 @@ resource "aws_route53_delegation_set" "delegation_set" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_zone" "zone" {
-  for_each = var.enable_module ? toset(local.zones) : []
+  for_each = var.module_enabled ? toset(local.zones) : []
 
   name              = each.value
   comment           = var.comment
@@ -53,6 +55,8 @@ resource "aws_route53_zone" "zone" {
     { Name = each.value },
     var.tags
   )
+
+  depends_on = [var.module_depends_on]
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -124,7 +128,7 @@ locals {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_record" "record" {
-  for_each = var.enable_module ? local.records : {}
+  for_each = var.module_enabled ? local.records : {}
 
   zone_id         = each.value.zone_id
   type            = each.value.type
@@ -167,4 +171,6 @@ resource "aws_route53_record" "record" {
       evaluate_target_health = alias.value.evaluate_target_health
     }
   }
+
+  depends_on = [var.module_depends_on]
 }
