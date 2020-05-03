@@ -51,12 +51,6 @@ variable "delegation_set_id" {
   default     = null
 }
 
-variable "enable_module" {
-  description = "Whether to enable the module and to create the Route53 Zone and it's associated resources."
-  type        = bool
-  default     = true
-}
-
 variable "force_destroy" {
   description = "Whether to force destroy all records (possibly managed outside of Terraform) in the zone when destroying the zone."
   type        = bool
@@ -157,4 +151,21 @@ variable "zone_id" {
   # Example:
   #
   # zone_id = "zoneid"
+}
+
+# ------------------------------------------------------------------------------
+# OPTIONAL MODULE CONFIGURATION PARAMETERS
+# These variables are used to configure the module.
+# See https://medium.com/mineiros/the-ultimate-guide-on-how-to-write-terraform-modules-part-1-81f86d31f024
+# ------------------------------------------------------------------------------
+variable "module_enabled" {
+  type        = bool
+  description = "(optional) Whether to create resources within the module or not. Default is true."
+  default     = true
+}
+
+variable "module_depends_on" {
+  type        = list(any)
+  description = "(optional) A list of external resources the module depends_on. Default is []."
+  default     = []
 }
