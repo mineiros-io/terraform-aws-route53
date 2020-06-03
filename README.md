@@ -15,12 +15,12 @@ A [Terraform](https://www.terraform.io) 0.12 module to create a scalable and hig
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
 - [Examples](#examples)
-  - [Makefile](#makefile)
 - [Module Versioning](#module-versioning)
   - [Backwards compatibility in `0.0.z` and `0.y.z` version](#backwards-compatibility-in-00z-and-0yz-version)
 - [About Mineiros](#about-mineiros)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
+- [Makefile Targets](#makefile-targets)
 - [License](#license)
 
 ## Module Features
@@ -87,12 +87,6 @@ We offer a broad set of examples that can be used to quickly start using this mo
 1. [Failover routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/failover-routing)
 1. [Weighted routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/weighted-routing)
 
-### Makefile
-
-This repository comes with a handy
-[Makefile](https://github.com/mineiros-io/terraform-aws-route53/blob/master/Makefile).
-Run `make help` to see details on each available target.
-
 ## Module Versioning
 
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
@@ -100,8 +94,8 @@ This Module follows the principles of [Semantic Versioning (SemVer)](https://sem
 Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
 
 1. Use the `MAJOR` version for incompatible changes.
-2. Use the `MINOR` version when adding functionality in a backwards compatible manner.
-3. Use the `PATCH` version when introducing backwards compatible bug fixes.
+1. Use the `MINOR` version when adding functionality in a backwards compatible manner.
+1. Use the `PATCH` version when introducing backwards compatible bug fixes.
 
 ### Backwards compatibility in `0.0.z` and `0.y.z` version
 
@@ -112,15 +106,14 @@ Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following co
 
 ## About Mineiros
 
-Mineiros is a [DevOps as a Service](https://www.mineiros.io/?ref=terraform-aws-route53) company based in Berlin, Germany. We offer commercial support
+Mineiros is a [DevOps as a Service](https://mineiros.io/?ref=terraform-aws-route53) company based in Berlin, Germany. We offer commercial support
 for all of our projects and encourage you to reach out if you have any questions or need help.
 Feel free to send us an email at [hello@mineiros.io](mailto:hello@mineiros.io).
 
 We can also help you with:
 
-- Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
-  databases, logging and monitoring, CI, etc.
-- Consulting & Training on AWS, Terraform and DevOps.
+- Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
+- Consulting & training on AWS, Terraform and DevOps
 
 ## Reporting Issues
 
@@ -130,8 +123,14 @@ to track community reported issues and missing features.
 ## Contributing
 
 Contributions are always encouraged and welcome! For the process of accepting changes, we use
-[Pull Requests](https://github.com/mineiros-io/terraform-aws-route53/pulls). If you’d like more information, please
+[Pull Requests](https://github.com/mineiros-io/terraform-aws-route53/pulls). If you'd like more information, please
 see our [Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-route53/blob/master/CONTRIBUTING.md).
+
+## Makefile Targets
+
+This repository comes with a handy
+[Makefile](https://github.com/mineiros-io/terraform-aws-route53/blob/master/Makefile).
+Run `make help` to see details on each available target.
 
 ## License
 
