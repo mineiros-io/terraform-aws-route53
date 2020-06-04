@@ -1,27 +1,30 @@
-<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-vertial-logo-smaller-font.svg" width="200"/>
+[<img src="https://raw.githubusercontent.com/mineiros-io/brand/master/mineiros-primary-logo.svg" width="400"/>](https://www.mineiros.io/?ref=terraform-aws-route53)
 
-[![Maintained by Mineiros.io](https://img.shields.io/badge/maintained%20by-mineiros.io-f32752.svg)](https://mineiros.io/?ref=terraform-aws-route53)
 [![Build Status](https://mineiros.semaphoreci.com/badges/terraform-aws-route53/branches/master.svg?style=shields)](https://mineiros.semaphoreci.com/projects/terraform-aws-route53)
 [![GitHub tag (latest SemVer)](https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-route53.svg?label=latest&sort=semver)](https://github.com/mineiros-io/terraform-aws-route53/releases)
-[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-brightgreen.svg)](https://github.com/hashicorp/terraform/releases)
-[![License](https://img.shields.io/badge/License-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![license](https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Terraform Version](https://img.shields.io/badge/terraform-~%3E%200.12.20-623CE4.svg)](https://github.com/hashicorp/terraform/releases)
+[<img src="https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack">](https://join.slack.com/t/mineiros-community/shared_invite/zt-ehidestg-aLGoIENLVs6tvwJ11w9WGg)
 
 # terraform-aws-route53
+
 A [Terraform](https://www.terraform.io) 0.12 module to create a scalable and highly available
-[Amazon Route53](https://aws.amazon.com/service/route53) Domain Name System (DNS) on
+[Amazon Route53](https://aws.amazon.com/route53/) Domain Name System (DNS) on
 [Amazon Web Services (AWS)](https://aws.amazon.com/).
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
 - [Examples](#examples)
-- [Makefile](#makefile)
 - [Module Versioning](#module-versioning)
+  - [Backwards compatibility in `0.0.z` and `0.y.z` version](#backwards-compatibility-in-00z-and-0yz-version)
 - [About Mineiros](#about-mineiros)
 - [Reporting Issues](#reporting-issues)
 - [Contributing](#contributing)
+- [Makefile Targets](#makefile-targets)
 - [License](#license)
 
 ## Module Features
+
 This module offers a convenient way to create Route53 zones and records.
 
 - **Zones**:
@@ -51,6 +54,7 @@ This module offers a convenient way to create Route53 zones and records.
   are being created, all created zones will share the same delegation set.
 
 ## Getting Started
+
 Most basic usage creating a Route53 zone and delegation set and
 a record for `www` pointing to localhost.
 
@@ -72,6 +76,7 @@ module "repository" {
 ```
 
 ## Examples
+
 We offer a broad set of examples that can be used to quickly start using this module.
 
 1. [Basic routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/basic_routing)
@@ -82,46 +87,54 @@ We offer a broad set of examples that can be used to quickly start using this mo
 1. [Failover routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/failover-routing)
 1. [Weighted routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/weighted-routing)
 
-### Makefile
-This repository comes with a handy
-[Makefile](https://github.com/mineiros-io/terraform-aws-route53/blob/master/Makefile).
-Run `make help` to see details on each available target.
-
 ## Module Versioning
+
 This Module follows the principles of [Semantic Versioning (SemVer)](https://semver.org/).
 
 Using the given version number of `MAJOR.MINOR.PATCH`, we apply the following constructs:
-1) Use the `MAJOR` version for incompatible changes.
-2) Use the `MINOR` version when adding functionality in a backwards compatible manner.
-3) Use the `PATCH` version when introducing backwards compatible bug fixes.
+
+1. Use the `MAJOR` version for incompatible changes.
+1. Use the `MINOR` version when adding functionality in a backwards compatible manner.
+1. Use the `PATCH` version when introducing backwards compatible bug fixes.
 
 ### Backwards compatibility in `0.0.z` and `0.y.z` version
+
 - In the context of initial development, backwards compatibility in versions `0.0.z` is **not guaranteed** when `z` is
   increased. (Initial development)
 - In the context of pre-release, backwards compatibility in versions `0.y.z` is **not guaranteed** when `y` is
-increased. (Pre-release)
+  increased. (Pre-release)
 
 ## About Mineiros
-Mineiros is a [DevOps as a Service](https://mineiros.io/) company based in Berlin, Germany. We offer commercial support
+
+Mineiros is a [DevOps as a Service](https://mineiros.io/?ref=terraform-aws-route53) company based in Berlin, Germany. We offer commercial support
 for all of our projects and encourage you to reach out if you have any questions or need help.
 Feel free to send us an email at [hello@mineiros.io](mailto:hello@mineiros.io).
 
 We can also help you with:
-- Terraform Modules for all types of infrastructure such as VPC's, Docker clusters,
-databases, logging and monitoring, CI, etc.
-- Consulting & Training on AWS, Terraform and DevOps.
+
+- Terraform modules for all types of infrastructure such as VPCs, Docker clusters, databases, logging and monitoring, CI, etc.
+- Consulting & training on AWS, Terraform and DevOps
 
 ## Reporting Issues
+
 We use GitHub [Issues](https://github.com/mineiros-io/terraform-aws-route53/issues)
 to track community reported issues and missing features.
 
 ## Contributing
+
 Contributions are always encouraged and welcome! For the process of accepting changes, we use
-[Pull Requests](https://github.com/mineiros-io/terraform-aws-route53/pulls). If you’d like more information, please
+[Pull Requests](https://github.com/mineiros-io/terraform-aws-route53/pulls). If you'd like more information, please
 see our [Contribution Guidelines](https://github.com/mineiros-io/terraform-aws-route53/blob/master/CONTRIBUTING.md).
 
+## Makefile Targets
+
+This repository comes with a handy
+[Makefile](https://github.com/mineiros-io/terraform-aws-route53/blob/master/Makefile).
+Run `make help` to see details on each available target.
+
 ## License
+
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE](https://github.com/mineiros-io/terraform-aws-route53/blob/master/LICENSE) for full details.
 
-Copyright &copy; 2020 Mineiros
+Copyright &copy; 2020 Mineiros GmbH
