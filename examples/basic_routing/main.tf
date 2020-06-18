@@ -4,7 +4,7 @@
 #   - (www.)acme.com
 #   - (www.)dev.acme.com
 #
-# The www. subdomains are implement through CNAMES and point on the A records.
+# The www. subdomains are implemented through CNAMES and point to the A records.
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
