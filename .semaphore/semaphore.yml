@@ -1,5 +1,5 @@
 version: v1.0
-name: "Terraform-Module-Route53 CI Pipeline"
+name: "CI/CD Pipeline"
 agent:
   machine:
     type: e1-standard-2
@@ -14,10 +14,5 @@ blocks:
       jobs:
         - name: "Pre Commit Hooks"
           commands:
-            - make docker/pre-commit-hooks
-
-promotions:
-  - name: "Unit Tests"
-    pipeline_file: unit-tests.yml
-    auto_promote:
-      when: "branch = 'master'"
+            - make test/pre-commit
+            - make test/unit-tests
