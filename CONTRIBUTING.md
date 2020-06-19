@@ -1,9 +1,9 @@
 # Contribution Guidelines
 
-First and foremost, we’d like to express our gratitude to you for taking the time to contribute. 
-We welcome and appreciate any and all contributions via 
+First and foremost, we’d like to express our gratitude to you for taking the time to contribute.
+We welcome and appreciate any and all contributions via
 [Pull Requests](https://help.github.com/en/github/collaborating-with-issues-and-pull-requests/about-pull-requests)
-along the [GitHub Flow](https://guides.github.com/introduction/flow/).  
+along the [GitHub Flow](https://guides.github.com/introduction/flow/).
 
 1. [Open a GitHub issue](#open-a-github-issue)
 1. [Fork the repository on GitHub](#fork-the-repository-on-github)
@@ -22,7 +22,7 @@ We advise that you open an issue and ask the
 [CODEOWNERS](https://help.github.com/en/github/creating-cloning-and-archiving-repositories/about-code-owners) and
 community prior to starting a contribution. This is your chance to ask questions and receive feedback before you start
 writing ( potentially wrong ) code. We value the direct contact to our community a lot, so don't hesitate to ask any
-questions. 
+questions.
 
 ## Fork the repository on GitHub
 
@@ -33,7 +33,7 @@ account and [create a new branch](https://guides.github.com/introduction/flow/) 
 ## Install the pre-commit hooks
 
 If the repository you're working on ships with a `.pre-commit-config.yaml,` make sure the necessary hooks have been
-installed before you begin working (e.g. a `pre-commit install`). 
+installed before you begin working (e.g. a `pre-commit install`).
 
 ## Update the documentation
 
@@ -59,7 +59,7 @@ properly. Do [commit](https://help.github.com/en/desktop/contributing-to-project
 early and often and make useful commit messages.
 
 If a backwards incompatible change cannot be avoided, please make sure to call that out when you submit a pull request,
-explaining why the change is absolutely necessary. 
+explaining why the change is absolutely necessary.
 
 ## Create a pull request
 

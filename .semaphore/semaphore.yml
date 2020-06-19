@@ -1,23 +1,24 @@
 version: v1.0
-name: "Terraform-Module-Route53 CI Pipeline"
+name: "CI/CD Pipeline"
 agent:
   machine:
     type: e1-standard-2
     os_image: ubuntu1804
 
+global_job_config:
+  secrets:
+    - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
+  prologue:
+    commands:
+      - checkout --use-cache
+
 blocks:
   - name: "Tests"
     task:
-      prologue:
-        commands:
-          - checkout --use-cache
       jobs:
         - name: "Pre Commit Hooks"
           commands:
-            - make docker/pre-commit-hooks
-
-promotions:
-  - name: "Unit Tests"
-    pipeline_file: unit-tests.yml
-    auto_promote:
-      when: "branch = 'master'"
+            - make test/pre-commit
+        - name: "Unit Tests"
+          commands:
+            - make test/unit-tests

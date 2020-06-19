@@ -5,6 +5,7 @@
 # ------------------------------------------------------------------------------
 # OUTPUT ALL RESOURCES AS FULL OBJECTS
 # ------------------------------------------------------------------------------
+
 output "zone" {
   description = "The created Hosted Zone(s)."
   value       = aws_route53_zone.zone
@@ -27,6 +28,7 @@ output "delegation_set" {
 # ------------------------------------------------------------------------------
 # OUTPUT MODULE CONFIGURATION
 # ------------------------------------------------------------------------------
+
 output "module_enabled" {
   description = "Whether the module is enabled"
   value       = var.module_enabled
