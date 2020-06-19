@@ -10,7 +10,8 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = var.aws_region
+  region  = var.aws_region
+  version = "~> 2.45"
 }
 
 # Create multiple zones with a single module

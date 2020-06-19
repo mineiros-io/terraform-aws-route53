@@ -7,28 +7,13 @@
 # The www. subdomains are implement through CNAMES and point on the A records.
 # ------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# Set Terraform and Provider Requirements for running this example
-# ------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
-# ------------------------------------------------------------------------------
-
-locals {
-  region = "us-east-1"
-}
+# ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = local.region
+  region  = "us-east-1"
+  version = "~> 2.45"
 }
 
 # ------------------------------------------------------------------------------
@@ -38,7 +23,6 @@ provider "aws" {
 resource "aws_s3_bucket" "website" {
   bucket         = "mineiros-test-website"
   acl            = "public-read"
-  region         = local.region
   hosted_zone_id = module.route53.zone["minerios.io"].zone_id
 
   website {
@@ -115,7 +99,7 @@ module "route53" {
       name    = "dev"
       type    = "A"
       ttl     = 1800
-      records = ["172.217.16.111"]
+      records = ["203.0.113.200"]
     },
     {
       type = "CNAME"

@@ -56,7 +56,7 @@ variable "primary_record_records" {
   description = "The records for primary Route53 A record."
   type        = set(string)
   default = [
-    "172.217.16.174"
+    "203.0.113.100",
   ]
 }
 
@@ -64,8 +64,8 @@ variable "secondary_record_records" {
   description = "The records for secondary Route53 A record."
   type        = set(string)
   default = [
-    "172.217.22.99",
-    "172.217.22.100"
+    "203.0.113.200",
+    "203.0.113.201",
   ]
 }
 

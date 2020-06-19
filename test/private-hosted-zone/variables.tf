@@ -32,8 +32,8 @@ variable "record_records" {
   description = "The records for the A record."
   type        = set(string)
   default = [
-    "172.217.16.206",
-    "172.217.18.163"
+    "203.0.113.100",
+    "203.0.113.101",
   ]
 }
 
