@@ -5,14 +5,20 @@ agent:
     type: e1-standard-2
     os_image: ubuntu1804
 
+global_job_config:
+  secrets:
+    - name: TERRAFORM_AWS_TESTACCOUNT_CREDENTIALS
+  prologue:
+    commands:
+      - checkout --use-cache
+
 blocks:
   - name: "Tests"
     task:
-      prologue:
-        commands:
-          - checkout --use-cache
       jobs:
         - name: "Pre Commit Hooks"
           commands:
             - make test/pre-commit
+        - name: "Unit Tests"
+          commands:
             - make test/unit-tests
