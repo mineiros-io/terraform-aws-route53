@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CREATE TWO ROUTE53 ZONES THAT SHARE THE SAME DELEGATION SET ( A GROUP OF FOUR NAME SERVERS )
+# CREATE TWO ROUTE53 ZONES THAT SHARE THE SAME DELEGATION SET (A GROUP OF FOUR NAME SERVERS)
 #
 # A set of four authoritative name servers that you can use with more than one hosted zone. By default, Route 53 assigns
 # a random selection of name servers to each new hosted zone. To make it easier to migrate DNS service to Route 53 for a

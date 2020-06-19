@@ -37,25 +37,20 @@ A [Terraform](https://www.terraform.io) 0.12 module to create a scalable and hig
 This module offers a convenient way to create Route53 zones and records.
 
 - **Zones**:
-  You can either create a single zone by passing a string (e.G. `"mineiros.com"`) or multiple zones by passing a list
-  of strings (e.G. `["mineiros.io", "mineiros.com]`) as the `name` parameter.
-  `name = "mineiros.io"`. You can also share the same records among multiple zones. Please see the
-  [example](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-same-records)
-  for details.
+  You can either create a single zone by passing a string (e.G. `"mineiros.com"`)
+  or multiple zones by passing a list of strings (e.G. `["mineiros.io", "mineiros.com]`)
+  as the `name` parameter. `name = "mineiros.io"`. You can also share the same
+  records among multiple zones. Please see the [example][same-records-example] for details.
 
 - **Records**:
-  Records can be shared among zones or be defined for a single zone only. We support
-  [alias](https://aws.amazon.com/premiumsupport/knowledge-center/route-53-create-alias-records/),
-  [weighted](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/TutorialLBRMultipleEC2InRegion.html)
-  and [failover](https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-configuring.html)
-  records.
+  Records can be shared among zones or be defined for a single zone only.
+  We support [alias], [weighted] and [failover] records.
 
 - **Default TTL for Records**
   Per default set a TTL (time to live) of 3600 seconds ( 1 hour ) for non-alias
   records. You can overwrite this behavior for records by setting the `ttl` parameter. To adjust the default value for
   TTL, please use the `default_ttl` parameter.
-  Please see the [examples](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples)
-  for details.
+  Please see the [examples] for details.
 
 - **Delegation Set**:
   This module will create a delegation set for every zone by default. The default behavior can be disabled by setting
@@ -118,8 +113,8 @@ See [variables.tf] and [examples/] for details and use-cases.
 
 - **`name`**: *(Required `any`, Forces new resource)*
 
-  The name of the hosted zone. To create multiple zones at once, pass a list of
-  names ["zone1", "zone2"].
+  The name of the Hosted Zone. To create multiple Hosted Zones at once,
+  pass a list of names `["zone1", "zone2"]`.
 
 - **[`records`](#route53-zone-records)**: *(Optional `any`)*
 
@@ -321,9 +316,14 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [AWS]: https://aws.amazon.com/
 [Semantic Versioning (SemVer)]: https://semver.org/
 
+[alias]: https://aws.amazon.com/premiumsupport/knowledge-center/route-53-create-alias-records/
+[weighted]: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted
+[failover]: https://docs.aws.amazon.com/Route53/latest/DeveloperGuide/dns-failover-configuring.html
+
 [examples/example/main.tf]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/examples/example/main.tf
 [variables.tf]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/variables.tf
-[examples/]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/examples
+[examples/]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples
+[same-records-example]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-same-records
 [Issues]: https://github.com/mineiros-io/terraform-aws-route53/issues
 [LICENSE]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/LICENSE
 [Makefile]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/Makefile
