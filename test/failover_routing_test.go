@@ -13,7 +13,7 @@ func TestFailoverRouting(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "../examples/failover-routing",
+		TerraformDir: "./failover-routing",
 		Upgrade:      true,
 		Vars: map[string]interface{}{
 			"zone_name": expectedZoneName,
