@@ -12,7 +12,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "(Required) The name of the hosted zone. To create multiple zones at once, pass a list of names [\"zone1\", \"zone2\"]."
+  description = "(Required) The name of the Hosted Zone. To create multiple Hosted Zones at once, pass a list of names [\"zone1\", \"zone2\"]."
   type        = any
 
   # Examples:
