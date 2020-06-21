@@ -15,7 +15,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = "us-east-1"
+  region  = var.aws_region
   version = "~> 2.45"
 }
 
@@ -25,10 +25,9 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53-zone-with-delegation-set" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name = "mineiros.io"
+  name = var.main_zone_name
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -37,9 +36,8 @@ module "route53-zone-with-delegation-set" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53-zone" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name              = "mineiros.com"
+  name              = var.secondary_zone_name
   delegation_set_id = module.route53-zone-with-delegation-set.delegation_set.id
 }

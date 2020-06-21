@@ -38,12 +38,12 @@ variable "dev_targets" {
   description = "The records for the dev. A record."
   type        = set(string)
   default = [
-    "172.217.16.111",
+    "203.0.113.200",
   ]
 }
 
 variable "zone_name" {
-  description = "The name of the Hosted Zone."
+  description = "The name of the hosted zone."
   type        = string
   default     = "mineiros.io"
 }

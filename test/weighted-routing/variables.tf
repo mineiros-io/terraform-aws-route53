@@ -26,7 +26,7 @@ variable "dev_targets" {
   description = "The records for the dev A record."
   type        = set(string)
   default = [
-    "216.239.32.116"
+    "203.0.113.100"
   ]
 }
 
@@ -34,7 +34,7 @@ variable "preview_targets" {
   description = "The records for the preview A record."
   type        = set(string)
   default = [
-    "216.239.32.117"
+    "203.0.113.101"
   ]
 }
 
@@ -42,8 +42,8 @@ variable "prod_targets" {
   description = "The records for the production A record."
   type        = set(string)
   default = [
-    "216.239.32.118",
-    "216.239.32.119"
+    "203.0.113.200",
+    "203.0.113.201"
   ]
 }
 
@@ -54,7 +54,7 @@ variable "skip_delegation_set_creation" {
 }
 
 variable "zone_name" {
-  description = "The name of the Hosted Zone."
+  description = "The name of the hosted zone."
   type        = string
   default     = "mineiros.io"
 }
