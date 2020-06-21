@@ -22,51 +22,23 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "testing_ttl" {
-  description = "The TTL ( Time to Live ) for the testing A record."
+variable "record_ttl" {
+  description = "The TTL of the record."
   type        = number
   default     = 3600
 }
 
-variable "testing_targets" {
-  description = "The records for the testing A record."
+variable "record_records" {
+  description = "The records for the A record."
   type        = set(string)
   default = [
-    "172.217.16.111"
+    "203.0.113.200",
+    "203.0.113.201"
   ]
 }
 
-variable "primary_ttl" {
-  description = "The TTL ( Time to Live ) for the primary A record."
-  type        = number
-  default     = 3600
-}
-
-variable "primary_targets" {
-  description = "The records for the primary A record."
-  type        = set(string)
-  default = [
-    "172.217.16.206",
-    "172.217.18.163"
-  ]
-}
-
-variable "primary_txt_targets" {
-  description = "The records for the primary TXT record."
-  type        = set(string)
-  default = [
-    "Lorem ipsum"
-  ]
-}
-
-variable "zone_a" {
-  description = "The name of the first zone to create."
+variable "zone_name" {
+  description = "The name of the hosted zone."
   type        = string
   default     = "mineiros.io"
-}
-
-variable "zone_b" {
-  description = "The name of the second zone to create."
-  type        = string
-  default     = "mineiros.com"
 }

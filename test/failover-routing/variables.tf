@@ -56,7 +56,7 @@ variable "primary_record_records" {
   description = "The records for primary Route53 A record."
   type        = set(string)
   default = [
-    "172.217.16.174"
+    "203.0.113.0"
   ]
 }
 
@@ -64,8 +64,8 @@ variable "secondary_record_records" {
   description = "The records for secondary Route53 A record."
   type        = set(string)
   default = [
-    "172.217.22.99",
-    "172.217.22.100"
+    "203.0.113.1",
+    "203.0.113.2"
   ]
 }
 
@@ -76,7 +76,7 @@ variable "skip_delegation_set_creation" {
 }
 
 variable "zone_name" {
-  description = "The name of the Hosted Zone."
+  description = "The name of the hosted zone."
   type        = string
   default     = "mineiros.io"
 }
