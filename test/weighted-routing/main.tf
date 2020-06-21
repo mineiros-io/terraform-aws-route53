@@ -7,23 +7,11 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
-# SET TERRAFORM AND PROVIDER REQUIREMENTS FOR RUNNING THIS MODULE
-# ---------------------------------------------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -36,11 +24,10 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name                         = "mineiros.io"
-  skip_delegation_set_creation = true
+  name                         = var.zone_name
+  skip_delegation_set_creation = var.skip_delegation_set_creation
 
   # We send 90% of our traffic to the prod system and 10% of our traffic to the preview system
   records = [
@@ -48,25 +35,18 @@ module "route53" {
       type           = "A"
       set_identifier = "prod"
       weight         = 90
-      records = [
-        "216.239.32.118",
-        "216.239.32.119",
-      ]
+      records        = var.prod_targets
     },
     {
       type           = "A"
       set_identifier = "preview"
       weight         = 10
-      records = [
-        "216.239.32.117",
-      ]
+      records        = var.preview_targets
     },
     {
-      type = "A"
-      name = "dev"
-      records = [
-        "216.239.32.116",
-      ]
+      type    = "A"
+      name    = "dev"
+      records = var.dev_targets
     }
   ]
 

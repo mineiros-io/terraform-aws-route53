@@ -13,7 +13,7 @@ func TestWeightedRouting(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "../examples/weighted-routing",
+		TerraformDir: "./weighted-routing",
 		Upgrade:      true,
 		Vars: map[string]interface{}{
 			"zone_name": expectedZoneName,

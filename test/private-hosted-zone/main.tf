@@ -10,23 +10,11 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
-# SET TERRAFORM AND PROVIDER REQUIREMENTS FOR RUNNING THIS MODULE
-# ---------------------------------------------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # Default VPC. Terraform does not create this resource, but instead "adopts" it into management.
@@ -41,10 +29,9 @@ resource "aws_default_vpc" "default" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name = "mineiros.io"
+  name = var.zone_name
 
   # Private zones require at least one VPC association at all times.
   vpc_ids = [
@@ -53,12 +40,9 @@ module "route53" {
 
   records = [
     {
-      type = "A"
-      ttl  = 3600
-      records = [
-        "172.217.16.206",
-        "172.217.18.163",
-      ]
+      type    = "A"
+      ttl     = var.record_ttl
+      records = var.record_records
     }
   ]
 }

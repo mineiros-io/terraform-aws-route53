@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CREATE TWO ROUTE53 ZONES THAT SHARE THE SAME DELEGATION SET (A GROUP OF FOUR NAME SERVERS)
+# CREATE TWO ROUTE53 ZONES THAT SHARE THE SAME DELEGATION SET ( A GROUP OF FOUR NAME SERVERS )
 #
 # A set of four authoritative name servers that you can use with more than one hosted zone. By default, Route 53 assigns
 # a random selection of name servers to each new hosted zone. To make it easier to migrate DNS service to Route 53 for a
@@ -10,24 +10,12 @@
 # https://docs.aws.amazon.com/cli/latest/reference/route53/create-reusable-delegation-set.html
 # ---------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# Set Terraform and Provider Requirements for running this example
-# ------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
 # ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -36,10 +24,9 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53-zone-with-delegation-set" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name = "mineiros.io"
+  name = var.main_zone_name
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -48,9 +35,8 @@ module "route53-zone-with-delegation-set" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 module "route53-zone" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name              = "mineiros.com"
+  name              = var.secondary_zone_name
   delegation_set_id = module.route53-zone-with-delegation-set.delegation_set.id
 }

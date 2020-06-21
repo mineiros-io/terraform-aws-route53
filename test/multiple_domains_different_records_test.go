@@ -14,7 +14,7 @@ func TestMultipleDomainsDifferentRecords(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "../examples/multiple-domains-different-records",
+		TerraformDir: "./multiple-domains-different-records",
 		Upgrade:      true,
 		Vars: map[string]interface{}{
 			"zone_a": expectedZoneAName,
