@@ -14,7 +14,7 @@ func TestDelegationSet(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "./delegation-set",
+		TerraformDir: "../examples/delegation-set",
 		Upgrade:      true,
 		// Variables to pass to our Terraform module using -var options
 		Vars: map[string]interface{}{

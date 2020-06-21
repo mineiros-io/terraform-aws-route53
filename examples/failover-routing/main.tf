@@ -7,24 +7,11 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Set Terraform and Provider Requirements for running this example
-# ---------------------------------------------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-
-# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -36,24 +23,23 @@ provider "aws" {
 # ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_route53_health_check" "primary" {
-  fqdn              = "mineiros.io"
-  port              = 80
-  type              = "HTTP"
-  resource_path     = "/"
-  failure_threshold = 5
-  request_interval  = 30
+  fqdn              = var.zone_name
+  port              = var.health_check_port
+  type              = var.health_check_protocol
+  resource_path     = var.health_check_resource_path
+  failure_threshold = var.health_check_failure_threshold
+  request_interval  = var.health_check_request_interval
 
   tags = {
-    Name = "mineiros-io-primary-healthcheck"
+    Name = "${replace(var.zone_name, ".", "-")}-primary-healthcheck"
   }
 }
 
 module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name                         = "mineiros.io"
-  skip_delegation_set_creation = true
+  name                         = var.zone_name
+  skip_delegation_set_creation = var.skip_delegation_set_creation
 
   records = [
     {
@@ -62,19 +48,14 @@ module "route53" {
       failover       = "PRIMARY"
       # Non-alias primary records must have an associated health check
       health_check_id = aws_route53_health_check.primary.id
-      records = [
-        "172.217.16.174"
-      ]
+      records         = var.primary_record_records
     },
     {
       type            = "A"
       set_identifier  = "failover"
       failover        = "SECONDARY"
       health_check_id = null
-      records = [
-        "172.217.22.99",
-        "172.217.22.100"
-      ]
+      records         = var.secondary_record_records
     }
   ]
 }

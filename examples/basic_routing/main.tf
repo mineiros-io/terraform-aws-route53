@@ -1,45 +1,29 @@
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # CREATE A ROUTE53 ZONE WITH SUBDOMAINS AND CNAMES
 # This example creates a zone and records for the main domain and a subdomain.
 #   - (www.)acme.com
 #   - (www.)dev.acme.com
 #
 # The www. subdomains are implement through CNAMES and point on the A records.
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
-# ------------------------------------------------------------------------------
-# Set Terraform and Provider Requirements for running this example
-# ------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
-# ------------------------------------------------------------------------------
-
-locals {
-  region = "us-east-1"
-}
+# ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = local.region
+  region = var.aws_region
 }
 
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # Create a public s3 bucket that will act as a website
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
 resource "aws_s3_bucket" "website" {
-  bucket         = "mineiros-test-website"
+  bucket         = var.bucket_name
   acl            = "public-read"
-  region         = local.region
-  hosted_zone_id = module.route53.zone["minerios.io"].zone_id
+  region         = var.aws_region
+  hosted_zone_id = module.route53.zone[var.zone_name].zone_id
 
   website {
     index_document = "index.html"
@@ -64,7 +48,7 @@ resource "aws_s3_bucket" "website" {
           "AWS": "*"
         },
         "Action": "s3:GetObject",
-        "Resource": "arn:aws:s3::mineiros-test-website/*"
+        "Resource": "arn:aws:s3:::${var.bucket_name}/*"
       }
     ]
   }
@@ -84,15 +68,14 @@ resource "aws_s3_bucket_object" "error" {
   source = "error.html"
 }
 
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 # Create the zone and a mixed set of records
-# ------------------------------------------------------------------------------
+# ---------------------------------------------------------------------------------------------------------------------
 
 module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  name = "a-dev-mineiros.io"
+  name = var.zone_name
 
   records = [
     {
@@ -108,20 +91,20 @@ module "route53" {
       type = "CNAME"
       name = "www"
       records = [
-        "mineiros.io"
+        var.zone_name
       ]
     },
     {
       name    = "dev"
       type    = "A"
-      ttl     = 1800
-      records = ["172.217.16.111"]
+      ttl     = var.dev_ttl
+      records = var.dev_targets
     },
     {
       type = "CNAME"
-      name = "www.dev.mineiros.io"
+      name = "www.dev.${var.zone_name}"
       records = [
-        "dev.mineiros.io"
+        "dev.${var.zone_name}"
       ]
     },
   ]

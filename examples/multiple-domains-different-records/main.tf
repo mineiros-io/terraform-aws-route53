@@ -6,44 +6,30 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 # ---------------------------------------------------------------------------------------------------------------------
-# Set Terraform and Provider Requirements for running this example
-# ---------------------------------------------------------------------------------------------------------------------
-
-terraform {
-  required_version = ">= 0.12.20"
-
-  required_providers {
-    aws = ">= 2.45"
-  }
-}
-
-# ---------------------------------------------------------------------------------------------------------------------
 # Configure the AWS Provider
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region = "us-east-1"
+  region = var.aws_region
 }
 
 # Create multiple zones with a single module
 module "zones" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
   name = [
-    "mineiros.io",
-    "mineiros.com"
+    var.zone_a,
+    var.zone_b
   ]
 }
 
 # Create the records for zone a
 module "zone_a_records" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
   # Wrap the reference to the zone inside a try statement to prevent ugly exceptions if we run terraform destroy
   # without running a successful terraform apply before.
-  zone_id = try(module.zones.zone["mineiros.io"].zone_id, null)
+  zone_id = try(module.zones.zone[var.zone_a].zone_id, null)
 
   records = [
     {
@@ -58,10 +44,9 @@ module "zone_a_records" {
 
 # Create the records for zone b
 module "zone_b_records" {
-  source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  source = "../.."
 
-  zone_id = try(module.zones.zone["mineiros.com"].zone_id, null)
+  zone_id = try(module.zones.zone[var.zone_b].zone_id, null)
 
   records = [
     {
