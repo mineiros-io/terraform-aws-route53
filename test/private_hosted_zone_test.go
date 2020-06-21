@@ -13,7 +13,7 @@ func TestPrivateHostedZone(t *testing.T) {
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
-		TerraformDir: "./private-hosted-zone",
+		TerraformDir: "../examples/private-hosted-zone",
 		Upgrade:      true,
 		Vars: map[string]interface{}{
 			"zone_name": expectedZoneName,
