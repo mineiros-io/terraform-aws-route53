@@ -1,16 +1,19 @@
 package test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestMultipleDomainsDifferentRecords(t *testing.T) {
 	t.Parallel()
 
-	expectedZoneAName := getUniqueTestZoneName()
-	expectedZoneBName := getUniqueTestZoneName()
+	expectedZoneAName := strings.ToLower(fmt.Sprintf("mineiros-%s.io", random.UniqueId()))
+	expectedZoneBName := strings.ToLower(fmt.Sprintf("mineiros-%s.io", random.UniqueId()))
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located

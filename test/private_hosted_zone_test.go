@@ -1,15 +1,18 @@
 package test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
 
+	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
 
 func TestPrivateHostedZone(t *testing.T) {
 	t.Parallel()
 
-	expectedZoneName := getUniqueTestZoneName()
+	expectedZoneName := strings.ToLower(fmt.Sprintf("mineiros-%s.io", random.UniqueId()))
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located

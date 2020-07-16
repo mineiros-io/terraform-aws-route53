@@ -1,7 +1,11 @@
 package test
 
 import (
+	"fmt"
+	"strings"
 	"testing"
+
+	"github.com/gruntwork-io/terratest/modules/random"
 
 	"github.com/gruntwork-io/terratest/modules/terraform"
 )
@@ -9,8 +13,8 @@ import (
 func TestDelegationSet(t *testing.T) {
 	t.Parallel()
 
-	expectedMainZoneName := getUniqueTestZoneName()
-	expectedSecondaryZoneName := getUniqueTestZoneName()
+	expectedMainZoneName := strings.ToLower(fmt.Sprintf("mineiros-%s.io", random.UniqueId()))
+	expectedSecondaryZoneName := strings.ToLower(fmt.Sprintf("mineiros-%s.io", random.UniqueId()))
 
 	terraformOptions := &terraform.Options{
 		// The path to where your Terraform code is located
