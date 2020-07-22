@@ -83,7 +83,7 @@ module "repository" {
 
 We offer a broad set of examples that can be used to quickly start using this module.
 
-1. [Basic routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/basic_routing)
+1. [Basic routing](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/basic-routing)
 2. [Private hosted zone](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/private-hosted-zone)
 3. [Multiple domains with different records](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-different-records)
 4. [Multiple domains that share the same record set](https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-same-records)

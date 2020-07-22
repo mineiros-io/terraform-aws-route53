@@ -16,7 +16,7 @@
 - [examples/weighted-routing] Create a Route53 Zone and associate two weighted records.
 
 <!-- References -->
-[examples/basic-routing]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/basic_routing
+[examples/basic-routing]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/basic-routing
 [examples/delegation-set]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/delegation-set
 [examples/failover-routing]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/failover-routing
 [examples/multiple-domains-different-records]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-different-records
