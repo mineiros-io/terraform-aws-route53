@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CREATE TWO ZONES WITH SAME RECORDS
+# CREATE TWO ROUTE53 ZONES WITH SAME RECORDS
 #
 # We create two zones and attach the same set of records to both. The zones will share the same delegation set.
 # ---------------------------------------------------------------------------------------------------------------------

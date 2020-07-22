@@ -49,7 +49,7 @@ Alternatively, you can also run the tests without Docker.
 
 1. Install [Docker]
 2. Set your AWS credentials as environment variables: `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`
-3. Run `make docker-run-tests`
+3. Run `make test/unit-tests`
 
 ### Run the tests without Docker
 
