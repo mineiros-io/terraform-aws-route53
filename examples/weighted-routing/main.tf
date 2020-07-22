@@ -1,5 +1,5 @@
 # ---------------------------------------------------------------------------------------------------------------------
-# CREATE A ROUTE53 ZONE AND ASSOCIATE TWO WEIGHTES RECORDS
+# CREATE A ROUTE53 ZONE AND ASSOCIATE TWO WEIGHTED RECORDS
 #
 # Weighted routing lets you associate multiple resources with a single domain name (example.com) or subdomain name
 # (acme.example.com) and choose how much traffic is routed to each resource. This can be useful for a variety of
