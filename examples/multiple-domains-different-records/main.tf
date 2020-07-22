@@ -1,7 +1,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 # CREATE TWO ROUTE53 ZONES WITH DIFFERENT RECORDS
 #
-# We create two zones and different records using the convinient name = [] shortcut.
+# We create two zones and different records using the convenient name = [] shortcut.
 # All created zones will share the same delegation set.
 # ---------------------------------------------------------------------------------------------------------------------
 
