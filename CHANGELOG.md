@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3] - 2020-07-22
+### Added
+- Add README.md to examples/
+### Fixxed
+- Correct typos in README.mds 
+
 ## [0.2.2] - 2020-06-13
 ### Changed
 - Work around a terraform issue in `module_depends_on` argument.
@@ -63,8 +69,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement support for `aws_route53_zone` resource.
 - Implement support for `aws_route53_record` resource.
 
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.1...HEAD
-[0.2.2]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.0...v0.2.1
+<!-- markdown-link-check-disable -->
+[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.2...v0.2.3
+<!-- markdown-link-check-enable -->
+[0.2.2]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.0...v0.2.1
 [0.2.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.0.6...v0.1.0
