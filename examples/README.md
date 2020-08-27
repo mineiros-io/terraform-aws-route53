@@ -21,6 +21,7 @@
 [examples/failover-routing]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/failover-routing
 [examples/multiple-domains-different-records]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-different-records
 [examples/multiple-domains-same-records]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/multiple-domains-same-records
+[examples/private-hosted-zone]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/private-hosted-zone
 [examples/weighted-routing]: https://github.com/mineiros-io/terraform-aws-route53/tree/master/examples/weighted-routing
 
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
