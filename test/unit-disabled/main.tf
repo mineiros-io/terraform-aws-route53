@@ -11,8 +11,7 @@ variable "aws_region" {
 }
 
 provider "aws" {
-  region  = var.aws_region
-  version = "~> 2.45"
+  region = var.aws_region
 }
 
 module "test" {

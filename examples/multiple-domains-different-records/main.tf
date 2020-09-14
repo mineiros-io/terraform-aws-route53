@@ -10,8 +10,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "~> 2.45"
+  region = "us-east-1"
 }
 
 # Create multiple zones with a single module

@@ -39,7 +39,8 @@ func TestBasicRouting(t *testing.T) {
 	zoneName := terraform.Output(t, terraformOptions, "zone_name")
 
 	// Validate if the name of the created zone matches the name that we defined in zone_name
-	assert.Equal(t, expectedZoneName+".", zoneName)
+	// the following assertion will fail in aws providers < 3.0
+	assert.Equal(t, expectedZoneName, zoneName)
 
 	// Validate that the length of the list of records
 	expectedListLen := len(expectedDevTargets)
