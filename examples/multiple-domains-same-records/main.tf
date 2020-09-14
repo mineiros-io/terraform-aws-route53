@@ -14,7 +14,7 @@ provider "aws" {
 
 module "zones" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   # Create two zones
   name = [

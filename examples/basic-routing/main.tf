@@ -73,7 +73,7 @@ resource "aws_s3_bucket_object" "error" {
 
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name = "a-dev-mineiros.io"
 

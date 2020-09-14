@@ -30,7 +30,7 @@ resource "aws_default_vpc" "default" {
 
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name = "mineiros.io"
 

@@ -6,11 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0]
+### Changed
+- Add support for terraform v0.13.
+- Add support for terraform aws provider v3.
+
 ## [0.2.3] - 2020-07-22
 ### Added
 - Add README.md to examples/
 ### Fixed
-- Correct typos in README.mds 
+- Correct typos in README.mds
 
 ## [0.2.2] - 2020-06-13
 ### Changed
