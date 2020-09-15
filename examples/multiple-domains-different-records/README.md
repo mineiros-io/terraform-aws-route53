@@ -14,7 +14,7 @@ All created zones will share the same delegation set.
 # Create multiple zones with a single module
 module "zones" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name = [
     "mineiros.io",
@@ -25,7 +25,7 @@ module "zones" {
 # Create the records for zone a
 module "zone_a_records" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   # Wrap the reference to the zone inside a try statement to prevent ugly exceptions if we run terraform destroy
   # without running a successful terraform apply before.
@@ -45,7 +45,7 @@ module "zone_a_records" {
 # Create the records for zone b
 module "zone_b_records" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   zone_id = try(module.zones.zone["mineiros.com"].zone_id, null)
 

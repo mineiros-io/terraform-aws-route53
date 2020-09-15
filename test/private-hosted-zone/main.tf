@@ -14,8 +14,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = var.aws_region
-  version = "~> 2.45"
+  region = var.aws_region
 }
 
 # Default VPC. Terraform does not create this resource, but instead "adopts" it into management.

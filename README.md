@@ -2,15 +2,18 @@
 
 [![Build Status][badge-build]][build-status]
 [![GitHub tag (latest SemVer)][badge-semver]][releases-github]
-[![license][badge-license]][apache20]
 [![Terraform Version][badge-terraform]][releases-terraform]
+[![AWS Provider Version][badge-tf-aws]][releases-aws-provider]
 [![Join Slack][badge-slack]][slack]
 
 # terraform-aws-route53
 
-A [Terraform](https://www.terraform.io) 0.12 module to create a scalable and highly available
+A [Terraform](https://www.terraform.io) module to create a scalable and highly available
 [Amazon Route53](https://aws.amazon.com/route53/) Domain Name System (DNS) on
 [Amazon Web Services (AWS)](https://aws.amazon.com/).
+
+***This module supports Terraform v0.13 as well as v0.12.20 and above
+and is compatible with the terraform AWS provider v3 as well as v2.45 and above.***
 
 - [Module Features](#module-features)
 - [Getting Started](#getting-started)
@@ -65,7 +68,7 @@ a record for `www` pointing to localhost.
 ```hcl
 module "repository" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.0"
+  version = "~> 0.3.0"
 
   name = "mineiros.io"
 
@@ -290,6 +293,8 @@ Run `make help` to see details on each available target.
 
 ## License
 
+[![license][badge-license]][apache20]
+
 This module is licensed under the Apache License Version 2.0, January 2004.
 Please see [LICENSE] for full details.
 
@@ -305,6 +310,9 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
 [badge-terraform]: https://img.shields.io/badge/terraform-0.13%20and%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
+
+[badge-tf-aws]: https://img.shields.io/badge/AWS-3%20and%202.45+-F8991D.svg?logo=terraform
+[releases-aws-provider]: https://github.com/terraform-providers/terraform-provider-aws/releases
 
 [build-status]: https://mineiros.semaphoreci.com/projects/terraform-aws-route53
 [releases-github]: https://github.com/mineiros-io/terraform-aws-route53/releases

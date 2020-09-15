@@ -11,7 +11,7 @@ The code in [main.tf] creates a private Route53 Zone with a single A-Record.
 ```hcl
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name = "mineiros.io"
 

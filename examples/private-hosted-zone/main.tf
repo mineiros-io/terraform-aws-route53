@@ -14,8 +14,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "~> 2.45"
+  region = "us-east-1"
 }
 
 # Default VPC. Terraform does not create this resource, but instead "adopts" it into management.
@@ -31,7 +30,7 @@ resource "aws_default_vpc" "default" {
 
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name = "mineiros.io"
 

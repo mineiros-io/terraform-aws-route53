@@ -9,13 +9,12 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "~> 2.45"
+  region = "us-east-1"
 }
 
 module "zones" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   # Create two zones
   name = [

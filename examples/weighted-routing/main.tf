@@ -11,8 +11,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 provider "aws" {
-  region  = "us-east-1"
-  version = "~> 2.45"
+  region = "us-east-1"
 }
 
 # ---------------------------------------------------------------------------------------------------------------------
@@ -26,7 +25,7 @@ provider "aws" {
 
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "0.2.2"
+  version = "~> 0.3.0"
 
   name                         = "mineiros.io"
   skip_delegation_set_creation = true
