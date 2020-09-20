@@ -7,9 +7,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 
 ## [0.3.0]
-### Changed
-- Add support for terraform v0.13.
-- Add support for terraform aws provider v3.
+### Added
+- Add support for Terraform v0.13.x
+- Add support for Terraform AWS Provider v3.x
+- Prepare support for Terraform v0.14.x
 
 ## [0.2.3] - 2020-07-22
 ### Added
@@ -74,7 +75,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement support for `aws_route53_zone` resource.
 - Implement support for `aws_route53_record` resource.
 
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.3...HEAD
+<!-- markdown-link-check-disable -->
+[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.3...v0.3.0
+<!-- markdown-link-check-enable -->
 [0.2.3]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.0...v0.2.1
