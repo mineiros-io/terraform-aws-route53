@@ -176,7 +176,7 @@ See [variables.tf] and [examples/] for details and use-cases.
   The record type. Valid values are `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NAPTR`,
   `NS`, `PTR`, `SOA`, `SPF`, `SRV` and `TXT`.
 
-- **`type`**: *(Optional `number`)*
+- **`ttl`**: *(Optional `number`)*
 
   The TTL of the record.
   Default is `3600`.
