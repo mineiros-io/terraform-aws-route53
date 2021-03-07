@@ -15,7 +15,7 @@ The `www.` subdomains are implement through CNAMES and point on the A-Records.
 ```hcl
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 
   name = "a-dev-mineiros.io"
 

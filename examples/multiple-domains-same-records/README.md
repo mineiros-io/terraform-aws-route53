@@ -12,7 +12,7 @@ both. The zones will share the same delegation set.
 ```hcl
 module "zones" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 
   name = [
     "mineiros.io",

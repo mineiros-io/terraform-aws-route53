@@ -11,7 +11,7 @@ The code in [main.tf] creates a Route53 Zone with two attached weighted records.
 ```hcl
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.3.0"
+  version = "~> 0.4.0"
 
   name                         = "mineiros.io"
   skip_delegation_set_creation = true
