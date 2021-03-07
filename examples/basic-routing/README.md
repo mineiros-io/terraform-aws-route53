@@ -87,7 +87,7 @@ Run `terraform destroy` to destroy all resources again.
 
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
-[badge-terraform]: https://img.shields.io/badge/terraform-0.13%20and%200.12.20+-623CE4.svg?logo=terraform
+[badge-terraform]: https://img.shields.io/badge/terraform-0.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [apache20]: https://opensource.org/licenses/Apache-2.0
