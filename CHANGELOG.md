@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.0]
+### Added
+- Add support for Terraform v0.14.x
+
 ## [0.3.0]
 ### Added
 - Add support for Terraform v0.13.x
@@ -76,9 +80,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Implement support for `aws_route53_record` resource.
 
 <!-- markdown-link-check-disable -->
-[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.3...v0.3.0
+[Unreleased]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.4.0...HEAD
+[0.4.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.3.0...v0.4.0
 <!-- markdown-link-check-enable -->
+[0.3.0]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.3...v0.3.0
 [0.2.3]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.2...v0.2.3
 [0.2.2]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.1...v0.2.2
 [0.2.1]: https://github.com/mineiros-io/terraform-aws-route53/compare/v0.2.0...v0.2.1

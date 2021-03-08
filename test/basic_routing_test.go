@@ -7,7 +7,6 @@ import (
 
 	"github.com/gruntwork-io/terratest/modules/random"
 	"github.com/gruntwork-io/terratest/modules/terraform"
-	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 )
 
@@ -34,13 +33,6 @@ func TestBasicRouting(t *testing.T) {
 
 	// This will run `terraform init` and `terraform apply` and fail the test if there are any errors
 	terraform.InitAndApply(t, terraformOptions)
-
-	// Retrieve the zone_name from the outputs
-	zoneName := terraform.Output(t, terraformOptions, "zone_name")
-
-	// Validate if the name of the created zone matches the name that we defined in zone_name
-	// the following assertion will fail in aws providers < 3.0
-	assert.Equal(t, expectedZoneName, zoneName)
 
 	// Validate that the length of the list of records
 	expectedListLen := len(expectedDevTargets)

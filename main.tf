@@ -16,7 +16,7 @@ locals {
   zones                        = var.name == null ? [] : try(tolist(var.name), [tostring(var.name)], [])
   skip_zone_creation           = length(local.zones) == 0
   run_in_vpc                   = length(var.vpc_ids) > 0
-  skip_delegation_set_creation = ! var.module_enabled || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
+  skip_delegation_set_creation = !var.module_enabled || local.skip_zone_creation || local.run_in_vpc ? true : var.skip_delegation_set_creation
 
   delegation_set_id = var.delegation_set_id != null ? var.delegation_set_id : try(
     aws_route53_delegation_set.delegation_set[0].id, null
