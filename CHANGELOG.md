@@ -6,9 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.0]
+## [0.4.0] - 2021-04-22
 ### Added
 - Add support for Terraform v0.14.x
+### Fix
+- Fix wrong wording in README.md
 
 ## [0.3.0]
 ### Added
