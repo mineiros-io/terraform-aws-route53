@@ -26,7 +26,7 @@ resource "aws_route53_health_check" "primary" {
 
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.4.0"
+  version = "~> 0.5.0"
 
   name                         = "mineiros.io"
   skip_delegation_set_creation = true

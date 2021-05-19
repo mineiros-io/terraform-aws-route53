@@ -12,7 +12,7 @@ A [Terraform](https://www.terraform.io) module to create a scalable and highly a
 [Amazon Route53](https://aws.amazon.com/route53/) Domain Name System (DNS) on
 [Amazon Web Services (AWS)](https://aws.amazon.com/).
 
-***This module supports Terraform v0.14, v0.13 as well as v0.12.20 and above
+***This module supports Terraform v0.15, v0.14, v0.13 as well as v0.12.20 and above
 and is compatible with the terraform AWS provider v3 as well as v2.45 and above.***
 
 - [Module Features](#module-features)
@@ -68,7 +68,7 @@ a record for `www` pointing to localhost.
 ```hcl
 module "route53" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.4.0"
+  version = "~> 0.5.0"
 
   name = "mineiros.io"
 
@@ -308,7 +308,7 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [badge-build]: https://mineiros.semaphoreci.com/badges/terraform-aws-route53/branches/master.svg?style=shields
 [badge-semver]: https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-route53.svg?label=latest&sort=semver
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
-[badge-terraform]: https://img.shields.io/badge/terraform-0.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
+[badge-terraform]: https://img.shields.io/badge/terraform-0.15,%200.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
 
 [badge-tf-aws]: https://img.shields.io/badge/AWS-3%20and%202.45+-F8991D.svg?logo=terraform

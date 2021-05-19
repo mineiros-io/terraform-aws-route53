@@ -25,7 +25,7 @@ provider "aws" {
 
 module "route53-zone-with-delegation-set" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.4.0"
+  version = "~> 0.5.0"
 
   name = "mineiros.io"
 }
@@ -37,7 +37,7 @@ module "route53-zone-with-delegation-set" {
 
 module "route53-zone" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.4.0"
+  version = "~> 0.5.0"
 
   name              = "mineiros.com"
   delegation_set_id = module.route53-zone-with-delegation-set.delegation_set.id
