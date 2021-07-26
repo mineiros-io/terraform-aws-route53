@@ -9,44 +9,6 @@
 The code in [main.tf] creates two zones and attach the same set of records to
 both. The zones will share the same delegation set.
 
-```hcl
-module "zones" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name = [
-    "mineiros.io",
-    "mineiros.com"
-  ]
-
-  records = [
-    {
-      type = "A"
-      ttl  = 3600
-      records = [
-        "203.0.113.200",
-        "203.0.113.201"
-      ]
-    },
-    {
-      type = "TXT"
-      ttl  = 300
-      records = [
-        "Lorem ipsum"
-      ]
-    },
-    {
-      name = "testing"
-      type = "A"
-      ttl  = 3600
-      records = [
-        "203.0.113.202"
-      ]
-    },
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository

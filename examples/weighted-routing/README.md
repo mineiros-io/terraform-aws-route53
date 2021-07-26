@@ -8,43 +8,6 @@
 
 The code in [main.tf] creates a Route53 Zone with two attached weighted records.
 
-```hcl
-module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name                         = "mineiros.io"
-  skip_delegation_set_creation = true
-
-  records = [
-    {
-      type           = "A"
-      set_identifier = "prod"
-      weight         = 90
-      records = [
-        "203.0.113.0",
-        "203.0.113.1"
-      ]
-    },
-    {
-      type           = "A"
-      set_identifier = "preview"
-      weight         = 10
-      records = [
-        "216.239.32.117",
-      ]
-    },
-    {
-      type = "A"
-      name = "dev"
-      records = [
-        "203.0.113.3",
-      ]
-    }
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository

@@ -12,47 +12,6 @@ The code in [main.tf] creates a Route53 Zone and Records for the main domain and
 
 The `www.` subdomains are implement through CNAMES and point on the A-Records.
 
-```hcl
-module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name = "a-dev-mineiros.io"
-
-  records = [
-    {
-      # We don't explicitly need to set names for records that match the zone
-      type = "A"
-      alias = {
-        name                   = aws_s3_bucket.website.website_endpoint
-        zone_id                = aws_s3_bucket.website.hosted_zone_id
-        evaluate_target_health = true
-      }
-    },
-    {
-      type = "CNAME"
-      name = "www"
-      records = [
-        "mineiros.io"
-      ]
-    },
-    {
-      name    = "dev"
-      type    = "A"
-      ttl     = 1800
-      records = ["203.0.113.200"]
-    },
-    {
-      type = "CNAME"
-      name = "www.dev.mineiros.io"
-      records = [
-        "dev.mineiros.io"
-      ]
-    },
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository

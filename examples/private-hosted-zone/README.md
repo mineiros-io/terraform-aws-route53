@@ -8,30 +8,6 @@
 
 The code in [main.tf] creates a private Route53 Zone with a single A-Record.
 
-```hcl
-module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name = "mineiros.io"
-
-  vpc_ids = [
-    aws_default_vpc.default.id
-  ]
-
-  records = [
-    {
-      type = "A"
-      ttl  = 3600
-      records = [
-        "203.0.113.100",
-        "203.0.113.101",
-      ]
-    }
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository

@@ -16,7 +16,7 @@ provider "aws" {
 # Create multiple zones with a single module
 module "zones" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
+  version = "~> 0.6.0"
 
   name = [
     "mineiros.io",
@@ -47,7 +47,7 @@ module "zone_a_records" {
 # Create the records for zone b
 module "zone_b_records" {
   source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
+  version = "~> 0.6.0"
 
   zone_id = try(module.zones.zone["mineiros.com"].zone_id, null)
 
