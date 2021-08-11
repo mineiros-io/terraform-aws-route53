@@ -305,7 +305,7 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
 [hello@mineiros.io]: mailto:hello@mineiros.io
 
-[badge-build]: https://mineiros.semaphoreci.com/badges/terraform-aws-route53/branches/master.svg?style=shields
+[badge-build]: https://github.com/mineiros-io/terraform-aws-route53/actions/workflows/main.yml/badge.svg
 [badge-semver]: https://img.shields.io/github/v/tag/mineiros-io/terraform-aws-route53.svg?label=latest&sort=semver
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
 [badge-terraform]: https://img.shields.io/badge/terraform-1.x%20|%200.15%200.14%20|%200.13%20|%200.12.20+-623CE4.svg?logo=terraform
@@ -314,7 +314,7 @@ Copyright &copy; 2020 [Mineiros GmbH][homepage]
 [badge-tf-aws]: https://img.shields.io/badge/AWS-3%20and%202.45+-F8991D.svg?logo=terraform
 [releases-aws-provider]: https://github.com/terraform-providers/terraform-provider-aws/releases
 
-[build-status]: https://mineiros.semaphoreci.com/projects/terraform-aws-route53
+[build-status]: https://github.com/mineiros-io/terraform-aws-route53/actions
 [releases-github]: https://github.com/mineiros-io/terraform-aws-route53/releases
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [apache20]: https://opensource.org/licenses/Apache-2.0
