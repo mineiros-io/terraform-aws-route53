@@ -10,52 +10,6 @@ The code in [main.tf] configures two Route53 Records with associated healthcheck
 Route53 will route the traffic to the secondary record if the healthcheck of the
 primary record reports an unhealthy status.
 
-```hcl
-resource "aws_route53_health_check" "primary" {
-  fqdn              = "mineiros.io"
-  port              = 80
-  type              = "HTTP"
-  resource_path     = "/"
-  failure_threshold = 5
-  request_interval  = 30
-
-  tags = {
-    Name = "mineiros-io-primary-healthcheck"
-  }
-}
-
-module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name                         = "mineiros.io"
-  skip_delegation_set_creation = true
-
-  records = [
-    {
-      type           = "A"
-      set_identifier = "primary"
-      failover       = "PRIMARY"
-      # Non-alias primary records must have an associated health check
-      health_check_id = aws_route53_health_check.primary.id
-      records = [
-        "203.0.113.200"
-      ]
-    },
-    {
-      type            = "A"
-      set_identifier  = "failover"
-      failover        = "SECONDARY"
-      health_check_id = null
-      records = [
-        "203.0.113.201",
-        "203.0.113.202"
-      ]
-    }
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository
@@ -87,7 +41,7 @@ Run `terraform destroy` to destroy all resources again.
 [main.tf]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/examples/failover-routing/main.tf
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
-[badge-terraform]: https://img.shields.io/badge/terraform-0.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
+[badge-terraform]: https://img.shields.io/badge/terraform-1.x%20|%200.15%200.14%20|%200.13%20|%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [apache20]: https://opensource.org/licenses/Apache-2.0

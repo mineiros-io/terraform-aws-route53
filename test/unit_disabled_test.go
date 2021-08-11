@@ -18,7 +18,10 @@ func TestUnitDisabled(t *testing.T) {
 		Upgrade: true,
 	}
 
-	stdout := terraform.InitAndPlan(t, terraformOptions)
+	defer terraform.Destroy(t, terraformOptions)
+
+	terraform.InitAndPlan(t, terraformOptions)
+	stdout := terraform.ApplyAndIdempotent(t, terraformOptions)
 
 	resourceCount := terraform.GetResourceCount(t, stdout)
 	assert.Equal(t, 0, resourceCount.Add, "No resources should have been created. Found %d instead.", resourceCount.Add)

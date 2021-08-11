@@ -12,47 +12,6 @@ The code in [main.tf] creates a Route53 Zone and Records for the main domain and
 
 The `www.` subdomains are implement through CNAMES and point on the A-Records.
 
-```hcl
-module "route53" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name = "a-dev-mineiros.io"
-
-  records = [
-    {
-      # We don't explicitly need to set names for records that match the zone
-      type = "A"
-      alias = {
-        name                   = aws_s3_bucket.website.website_endpoint
-        zone_id                = aws_s3_bucket.website.hosted_zone_id
-        evaluate_target_health = true
-      }
-    },
-    {
-      type = "CNAME"
-      name = "www"
-      records = [
-        "mineiros.io"
-      ]
-    },
-    {
-      name    = "dev"
-      type    = "A"
-      ttl     = 1800
-      records = ["203.0.113.200"]
-    },
-    {
-      type = "CNAME"
-      name = "www.dev.mineiros.io"
-      records = [
-        "dev.mineiros.io"
-      ]
-    },
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository
@@ -81,13 +40,10 @@ Run `terraform destroy` to destroy all resources again.
 
 <!-- References -->
 
-<!-- markdown-link-check-disable -->
 [main.tf]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/examples/basic-routing/main.tf
-<!-- markdown-link-check-enable -->
-
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
-[badge-terraform]: https://img.shields.io/badge/terraform-0.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
+[badge-terraform]: https://img.shields.io/badge/terraform-1.x%20|%200.15%200.14%20|%200.13%20|%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [apache20]: https://opensource.org/licenses/Apache-2.0

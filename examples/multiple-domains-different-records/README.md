@@ -10,58 +10,6 @@ The code in [main.tf] creates two zones and different records using the
 convenient `name = []` shortcut.
 All created zones will share the same delegation set.
 
-```hcl
-# Create multiple zones with a single module
-module "zones" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  name = [
-    "mineiros.io",
-    "mineiros.com"
-  ]
-}
-
-# Create the records for zone a
-module "zone_a_records" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  # Wrap the reference to the zone inside a try statement to prevent ugly exceptions if we run terraform destroy
-  # without running a successful terraform apply before.
-  zone_id = try(module.zones.zone["mineiros.io"].zone_id, null)
-
-  records = [
-    {
-      type = "TXT"
-      ttl  = 300
-      records = [
-        "Lorem ipsum"
-      ]
-    }
-  ]
-}
-
-# Create the records for zone b
-module "zone_b_records" {
-  source  = "mineiros-io/route53/aws"
-  version = "~> 0.5.0"
-
-  zone_id = try(module.zones.zone["mineiros.com"].zone_id, null)
-
-  records = [
-    {
-      type = "TXT"
-      ttl  = 600
-      records = [
-        "Lorem ipsum",
-        "Lorem ipsum dolor sit amet"
-      ]
-    }
-  ]
-}
-```
-
 ## Running the example
 
 ### Cloning the repository
@@ -93,7 +41,7 @@ Run `terraform destroy` to destroy all resources again.
 [main.tf]: https://github.com/mineiros-io/terraform-aws-route53/blob/master/examples/multiple-domains-different-records/main.tf
 [homepage]: https://mineiros.io/?ref=terraform-aws-route53
 [badge-license]: https://img.shields.io/badge/license-Apache%202.0-brightgreen.svg
-[badge-terraform]: https://img.shields.io/badge/terraform-0.14,%200.13,%200.12.20+-623CE4.svg?logo=terraform
+[badge-terraform]: https://img.shields.io/badge/terraform-1.x%20|%200.15%200.14%20|%200.13%20|%200.12.20+-623CE4.svg?logo=terraform
 [badge-slack]: https://img.shields.io/badge/slack-@mineiros--community-f32752.svg?logo=slack
 [releases-terraform]: https://github.com/hashicorp/terraform/releases
 [apache20]: https://opensource.org/licenses/Apache-2.0
