@@ -10,4 +10,3 @@ repos:
       - id: goimports
       - id: golangci-lint
       - id: phony-targets
-      - id: markdown-link-check
