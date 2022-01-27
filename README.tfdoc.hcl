@@ -134,7 +134,7 @@ section {
         }
 
         variable "module_depends_on" {
-          type        = list(any)
+          type        = list(dependency)
           default     = []
           description = <<-END
             A list of dependencies. Any object can be _assigned_ to this list to define a
@@ -148,7 +148,7 @@ section {
 
         variable "name" {
           required       = true
-          type           = any
+          type           = string
           readme_example = <<-END
             Single:   name = "example.com"
             Multiple: name = ["example.com", "example.io"]
@@ -160,7 +160,7 @@ section {
         }
 
         variable "records" {
-          type        = any
+          type        = list(record)
           default     = []
           description = <<-END
             A list of records to create in the Hosted Zone.
@@ -191,30 +191,29 @@ section {
           }
 
           attribute "alias" {
-            type        = any
-            readme_type = "object(alias)"
+            type        = object(alias)
             description = <<-END
               An alias block. Expects `name`, `zone_id` and `evaluate_target_health` to be defined. Conflicts with `ttl` & `records`.
             END
 
             attribute "name" {
-              required = true
-              type = string
+              required    = true
+              type        = string
               description = <<-END
                 DNS domain name for a CloudFront distribution, S3 bucket, ELB, or another resource record set in this hosted zone.
               END
             }
 
             attribute "zone_id" {
-              required = true
-              type = string
+              required    = true
+              type        = string
               description = <<-END
                 Hosted zone ID for a CloudFront distribution, S3 bucket, ELB, or Route 53 hosted zone.
               END
             }
 
             attribute "evaluate_target_health" {
-              type = bool
+              type        = bool
               description = <<-END
                 Set to true if you want Route 53 to determine whether to respond to DNS queries using this resource record set by checking the health of the resource record set. 
               END
@@ -351,12 +350,35 @@ section {
     title   = "Module Outputs"
     content = <<-END
       The following attributes are exported by the module:
-
-      - **`zone`**: All `aws_route53_zone` objects.
-      - **`records`**: All `aws_route53_record` objects.
-      - **`delegation_set`**: The `aws_route53_delegation_set` object.
-      - **`module_enabled`**: Wether this module is enabled.
     END
+
+    output "zone" {
+      type        = list(zone)
+      description = <<-END
+        All `aws_route53_zone` objects.
+      END
+    }
+
+    output "records" {
+      type        = list(record)
+      description = <<-END
+        All `aws_route53_record` objects.
+      END
+    }
+
+    output "delegation_set" {
+      type        = object(delegation_set)
+      description = <<-END
+        The `aws_route53_delegation_set` object.
+      END
+    }
+
+    output "module_enabled" {
+      type        = bool
+      description = <<-END
+        Whether this module is enabled.
+      END
+    }
   }
 
   section {

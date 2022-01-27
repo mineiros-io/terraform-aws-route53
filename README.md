@@ -109,19 +109,19 @@ See [variables.tf] and [examples/] for details and use-cases.
 
   Default is `true`.
 
-- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(any)`)*<a name="var-module_depends_on"></a>
+- [**`module_depends_on`**](#var-module_depends_on): *(Optional `list(dependency)`)*<a name="var-module_depends_on"></a>
 
   A list of dependencies. Any object can be _assigned_ to this list to define a
-  hidden external dependency.
+    hidden external dependency.
 
   Default is `[]`.
 
 #### Route53 Zone
 
-- [**`name`**](#var-name): *(**Required** `any`)*<a name="var-name"></a>
+- [**`name`**](#var-name): *(**Required** `string`)*<a name="var-name"></a>
 
   The name of the Hosted Zone. To create multiple Hosted Zones at once,
-  pass a list of names `["zone1", "zone2"]`. Forces new resource.
+    pass a list of names `["zone1", "zone2"]`. Forces new resource.
 
   Example:
 
@@ -130,67 +130,67 @@ See [variables.tf] and [examples/] for details and use-cases.
   Multiple: name = ["example.com", "example.io"]
   ```
 
-- [**`records`**](#var-records): *(Optional `any`)*<a name="var-records"></a>
+- [**`records`**](#var-records): *(Optional `list(record)`)*<a name="var-records"></a>
 
   A list of records to create in the Hosted Zone.
 
   Default is `[]`.
 
-  The object accepts the following attributes:
+  Each `record` object in the list accepts the following attributes:
 
-  - [**`name`**](#attr-name-records): *(**Required** `string`)*<a name="attr-name-records"></a>
+  - [**`name`**](#attr-records-name): *(**Required** `string`)*<a name="attr-records-name"></a>
 
     The name of the record.
 
-  - [**`type`**](#attr-type-records): *(**Required** `string`)*<a name="attr-type-records"></a>
+  - [**`type`**](#attr-records-type): *(**Required** `string`)*<a name="attr-records-type"></a>
 
     The record type. Valid values are `A`, `AAAA`, `CAA`, `CNAME`, `MX`, `NAPTR`, `NS`, `PTR`, `SOA`, `SPF`, `SRV` and `TXT`.
 
-  - [**`ttl`**](#attr-ttl-records): *(Optional `number`)*<a name="attr-ttl-records"></a>
+  - [**`ttl`**](#attr-records-ttl): *(Optional `number`)*<a name="attr-records-ttl"></a>
 
     The TTL of the record.
 
     Default is `3600`.
 
-  - [**`alias`**](#attr-alias-records): *(Optional `object(alias)`)*<a name="attr-alias-records"></a>
+  - [**`alias`**](#attr-records-alias): *(Optional `object(alias)`)*<a name="attr-records-alias"></a>
 
     An alias block. Expects `name`, `zone_id` and `evaluate_target_health` to be defined. Conflicts with `ttl` & `records`.
 
-    The object accepts the following attributes:
+    The `alias` object accepts the following attributes:
 
-    - [**`name`**](#attr-name-alias-records): *(**Required** `string`)*<a name="attr-name-alias-records"></a>
+    - [**`name`**](#attr-records-alias-name): *(**Required** `string`)*<a name="attr-records-alias-name"></a>
 
       DNS domain name for a CloudFront distribution, S3 bucket, ELB, or another resource record set in this hosted zone.
 
-    - [**`zone_id`**](#attr-zone_id-alias-records): *(**Required** `string`)*<a name="attr-zone_id-alias-records"></a>
+    - [**`zone_id`**](#attr-records-alias-zone_id): *(**Required** `string`)*<a name="attr-records-alias-zone_id"></a>
 
       Hosted zone ID for a CloudFront distribution, S3 bucket, ELB, or Route 53 hosted zone.
 
-    - [**`evaluate_target_health`**](#attr-evaluate_target_health-alias-records): *(Optional `bool`)*<a name="attr-evaluate_target_health-alias-records"></a>
+    - [**`evaluate_target_health`**](#attr-records-alias-evaluate_target_health): *(Optional `bool`)*<a name="attr-records-alias-evaluate_target_health"></a>
 
       Set to true if you want Route 53 to determine whether to respond to DNS queries using this resource record set by checking the health of the resource record set.
 
-  - [**`allow_overwrite`**](#attr-allow_overwrite-records): *(Optional `bool`)*<a name="attr-allow_overwrite-records"></a>
+  - [**`allow_overwrite`**](#attr-records-allow_overwrite): *(Optional `bool`)*<a name="attr-records-allow_overwrite"></a>
 
     Allow creation of this record in Terraform to overwrite an existing record, if any. This does not affect the ability to update the record in Terraform and does not prevent other resources within Terraform or manual Route 53 changes outside Terraform from overwriting this record.
     This configuration is not recommended for most environments.
 
     Default is `false`.
 
-  - [**`health_check_id`**](#attr-health_check_id-records): *(Optional `string`)*<a name="attr-health_check_id-records"></a>
+  - [**`health_check_id`**](#attr-records-health_check_id): *(Optional `string`)*<a name="attr-records-health_check_id"></a>
 
     The health check the record should be associated with.
 
-  - [**`set_identifier`**](#attr-set_identifier-records): *(Optional `string`)*<a name="attr-set_identifier-records"></a>
+  - [**`set_identifier`**](#attr-records-set_identifier): *(Optional `string`)*<a name="attr-records-set_identifier"></a>
 
     Unique identifier to differentiate records with routing policies from one another. Required if using `failover`, `geolocation`, `latency`, or `weighted routing` policies documented below.
 
-  - [**`weight`**](#attr-weight-records): *(Optional `number`)*<a name="attr-weight-records"></a>
+  - [**`weight`**](#attr-records-weight): *(Optional `number`)*<a name="attr-records-weight"></a>
 
     A numeric value indicating the relative weight of the record. Will turn the record into a weighted record.
     For details see http://docs.aws.amazon.com/Route53/latest/DeveloperGuide/routing-policy.html#routing-policy-weighted
 
-  - [**`failover`**](#attr-failover-records): *(Optional `number`)*<a name="attr-failover-records"></a>
+  - [**`failover`**](#attr-records-failover): *(Optional `number`)*<a name="attr-records-failover"></a>
 
     The failover type of the record. Will turn the record into a failover record.
     Possible values are `PRIMARY` and `SECONDARY`. A `PRIMARY` record will be served if its healthcheck is passing, otherwise the `SECONDARY` will be served.
@@ -217,7 +217,7 @@ See [variables.tf] and [examples/] for details and use-cases.
 - [**`vpc_ids`**](#var-vpc_ids): *(Optional `list(string)`)*<a name="var-vpc_ids"></a>
 
   A list of IDs of VPCs to associate with a private hosted zone.
-Conflicts with the delegation_set_id.
+  Conflicts with the delegation_set_id.
 
   Default is `[]`.
 
@@ -257,10 +257,21 @@ Conflicts with the delegation_set_id.
 
 The following attributes are exported by the module:
 
-- **`zone`**: All `aws_route53_zone` objects.
-- **`records`**: All `aws_route53_record` objects.
-- **`delegation_set`**: The `aws_route53_delegation_set` object.
-- **`module_enabled`**: Wether this module is enabled.
+- [**`zone`**](#output-zone): *(`list(zone)`)*<a name="output-zone"></a>
+
+  All `aws_route53_zone` objects.
+
+- [**`records`**](#output-records): *(`list(record)`)*<a name="output-records"></a>
+
+  All `aws_route53_record` objects.
+
+- [**`delegation_set`**](#output-delegation_set): *(`object(delegation_set)`)*<a name="output-delegation_set"></a>
+
+  The `aws_route53_delegation_set` object.
+
+- [**`module_enabled`**](#output-module_enabled): *(`bool`)*<a name="output-module_enabled"></a>
+
+  Whether this module is enabled.
 
 ## External Documentation
 
