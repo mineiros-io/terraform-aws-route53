@@ -81,8 +81,7 @@ section {
 
       ```hcl
       module "route53" {
-        source  = "mineiros-io/route53/aws"
-        version = "~> 0.6.0"
+        source  = "git@github.com:mineiros-io/terraform-aws-route53.git?ref=v0.6.0"
 
         name = "mineiros.io"
 
